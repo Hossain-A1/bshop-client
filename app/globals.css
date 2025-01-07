@@ -2,20 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* globals.css */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px; /* Set width for the scrollbar */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #DEDEDE; /* Color of the scrollbar */
+  border-radius: 4px; /* Roundness of the scrollbar thumb */
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+.custom-scrollbar::-webkit-scrollbar-button {
+  display: none; /* Remove scroll arrow buttons */
 }
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; /* Background of the track */
+}
+
+
