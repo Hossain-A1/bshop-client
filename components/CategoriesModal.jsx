@@ -47,15 +47,15 @@ const CategoriesModal = ({ setOpenCtg }) => {
   };
 
   return (
-    <div className='absolute w-[60vw] h-96  left-1/2 top-16 -translate-x-1/2 bg-white shadow-lg rounded-md'>
-      <div className='flex items-center h-full w-full'>
+    <div className='absolute z-20 h-full w-full md:w-[60vw] md:h-96  left-1/2 max-sm:top-[64px] top-[65px] -translate-x-1/2 bg-white shadow-lg rounded'>
+      <div className='flex items-center   h-full w-full'>
         {/* Left Menu */}
-        <div className='w-1/4 border-r pl-4  h-full overflow-y-scroll custom-scrollbar'>
+        <div className='w-auto lg:w-1/3 border-r pl-4  h-full overflow-y-scroll custom-scrollbar'>
           <ul className='space-y-2 '>
             {ctgData.map((category, index) => (
               <li
                 key={index}
-                className={`flex justify-between items-center cursor-pointer font-medium ${
+                className={`flex justify-between items-center  cursor-pointer text-xs md:text-sm lg:text-lg font-medium ${
                   activeCategory === category.text ? "text-blue-500" : ""
                 }`}
                 onClick={() => {
@@ -67,7 +67,7 @@ const CategoriesModal = ({ setOpenCtg }) => {
                 {category.text}
                 <p>
                   {" "}
-                  <MdOutlineKeyboardArrowRight className='h-6 text-xl mt-1' />
+                  <MdOutlineKeyboardArrowRight className='md:h-6 lg:text-xl text-sm mt-1' />
                 </p>
               </li>
             ))}
@@ -75,10 +75,11 @@ const CategoriesModal = ({ setOpenCtg }) => {
         </div>
 
         {/* Right Content */}
-        <div className='w-3/4 pl-4 h-full overflow-y-scroll custom-scrollbar'>
+        <div className=' w-full pl-2 md:pl-4 h-full overflow-y-scroll custom-scrollbar'>
           {categoryComponents[activeCategory]}
         </div>
       </div>
+    
     </div>
   );
 };

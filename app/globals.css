@@ -20,4 +20,9 @@
   background: transparent; /* Background of the track */
 }
 
+/* Prevent scrolling when no-scroll class is active */
+.no-scroll {
+  overflow: hidden;
+  height: 100vh;
+}
 
