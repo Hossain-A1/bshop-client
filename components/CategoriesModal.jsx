@@ -28,12 +28,12 @@ const CategoriesModal = ({ setOpenCtg }) => {
     "Women's Clothing": <WomenClothing />,
     "Women's Shoes": <WomenShoes />,
     "Kids Fashion": <KidsFashion />,
-    Electronics: <Electronics />,
+    "Electronics": <Electronics />,
     "Tools & Home Use": <ToolsAndHomeUse />,
   };
 
   // Dynamic route mapping for categories
-  const categoryRoutes = {
+   const categoryRoutes = {
     "Leather Products": "/leather-items",
     "Home & Kitchen": "/best-sellers",
     "Food & Grocery": "/health",
@@ -42,7 +42,7 @@ const CategoriesModal = ({ setOpenCtg }) => {
     "Women's Clothing": "/clothes",
     "Women's Shoes": "/women",
     "Kids Fashion": "/kids",
-    Electronics: "/all",
+    "Electronics": "/all",
     "Tools & Home Use": "/beauty",
   };
 

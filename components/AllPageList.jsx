@@ -14,7 +14,7 @@ const AllPageList = () => {
     { label: "Health", href: "/health" },
   ];
   return (
-    <div className='flex items-center gap-4  overflow-x-scroll py-1'>
+    <div className='flex items-center gap-4  overflow-x-scroll hidden-scroll  py-1'>
       {listOfPage.map((list, i) => (
         <Link
         key={i}

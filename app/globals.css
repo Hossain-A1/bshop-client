@@ -7,6 +7,9 @@
   width: 8px; /* Set width for the scrollbar */
 }
 
+.hidden-scroll::-webkit-scrollbar{
+  display: none;
+}
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #DEDEDE; /* Color of the scrollbar */
   border-radius: 4px; /* Roundness of the scrollbar thumb */
@@ -26,3 +29,6 @@
   height: 100vh;
 }
 
+.ww{
+  width: 20rem;
+}

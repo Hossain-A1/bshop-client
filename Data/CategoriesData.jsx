@@ -120,3 +120,19 @@ export const ctgData = [
     ],
   },
 ];
+
+
+export const data =[
+  {_id:121,
+    cover:"https://images.pexels.com/photos/292999/pexels-photo-292999.jpeg?auto=compress&cs=tinysrgb&w=600"
+  },
+  {_id:122,
+    cover:"https://images.pexels.com/photos/292999/pexels-photo-292999.jpeg?auto=compress&cs=tinysrgb&w=600"
+  },
+  {_id:123,
+    cover:"https://images.pexels.com/photos/292999/pexels-photo-292999.jpeg?auto=compress&cs=tinysrgb&w=600"
+  },
+  {_id:1214,
+    cover:"https://images.pexels.com/photos/292999/pexels-photo-292999.jpeg?auto=compress&cs=tinysrgb&w=600"
+  },
+]

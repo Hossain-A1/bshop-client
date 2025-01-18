@@ -52,10 +52,10 @@ const Navbar = () => {
             </p>
 
             {openCtg && (
-              <>
+              <div>
                 <CategoriesModal setOpenCtg={setOpenCtg} />
                 <Overlay setOpenCtg={setOpenCtg} />
-              </>
+              </div>
             )}
           </div>
         </div>
@@ -74,7 +74,7 @@ const Navbar = () => {
           </span>
 
           <span>
-            <FaListUl onClick={()=>setOpenCtg(true)} className='text-xl cursor-pointer ' />
+            <FaListUl onClick={()=>setOpenCtg(true)} className=' lg:hidden text-xl cursor-pointer ' />
           </span>
           <span>
             <FaRegUser onClick={()=>setOpenCtg(false)} className='text-xl' />

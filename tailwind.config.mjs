@@ -1,5 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  safelist: [
+    'border-black',
+    'bg-bg_color',
+    'bg-bg_org',
+    'border-org',
+  ],
+  
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -8,8 +15,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        bg_color: "#FFFFFF",
+        bg_org: "#FB8114",
+        org:"#FB8114"
       },
     },
   },
