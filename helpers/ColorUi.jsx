@@ -72,9 +72,9 @@ const ProductUI = ({ setViewPicture }) => {
   };
 
   return (
-    <div className='  border-2 border-gray-700   rounded-lg shadow-md'>
+    <div className='  border-2 border-org   rounded-lg shadow-md'>
       {/* Sale Banner */}
-      <div className='bg-bg_org text-white  rounded-t-lg flex justify-between items-center'>
+      <div className='bg-bg_org text-white   flex justify-between items-center'>
         <span className='px-3 font-bold'>Big Sale</span>
         <div className='flex items-center gap-2 px-3'>
           <span>Ends in</span>
@@ -89,7 +89,7 @@ const ProductUI = ({ setViewPicture }) => {
           {colors.map((color) => (
             <div
               key={color.id}
-              className={`border-2 lg:h-36 w-full flex flex-col justify-between p-1   sm:p-2 rounded-lg cursor-pointer   ${
+              className={`border-2 lg:h-36 w-full flex flex-col justify-between  rounded-md cursor-pointer   ${
                 selectedColor === color.value
                   ? "border-black"
                   : "border-gray-300"
@@ -100,7 +100,7 @@ const ProductUI = ({ setViewPicture }) => {
             >
         <figure className="w-24 h-20 lg:h-28  overflow-hidden">
         <Image
-                className='rounded-md  h-20 sm:h-40  object-cover'
+                className='rounded-md  h-full w-full  object-cover'
                 src={color.image}
                 alt={color.name}
                 width={280}
@@ -108,7 +108,7 @@ const ProductUI = ({ setViewPicture }) => {
               />
         </figure>
               <p
-                className={`text-center text-sm h-4  mt-1 ${
+                className={`text-center text-sm h-4 mb-1 mt-1 ${
                   selectedColor === color.value
                     ? "font-bold text-[#0A8800]"
                     : ""
@@ -140,8 +140,7 @@ const ProductUI = ({ setViewPicture }) => {
       </div>
 
       {/* Quantity and Add Button */}
-      <div className='p-2 flex items-center justify-between mt-2'>
-        <div className='flex items-center gap-2 px-3'>
+      <div className='p-2 flex gap-1 items-center mt-2'>
           <label htmlFor='quantity' className='text-sm font-medium'>
             Qty
           </label>
@@ -149,11 +148,11 @@ const ProductUI = ({ setViewPicture }) => {
             id='quantity'
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
-            className='border  rounded-md p-1'
+            className='border  rounded-md px-4 py-1'
           >
             {[...Array(100)].map((_, index) => (
               <option
-                className='font-semibold'
+                className='font-semibold '
                 key={index + 1}
                 value={index + 1}
               >
@@ -161,10 +160,7 @@ const ProductUI = ({ setViewPicture }) => {
               </option>
             ))}
           </select>
-        </div>
-        <button className='bg-green-500 text-white px-4 py-2 rounded-md shadow hover:bg-green-600'>
-          Added
-        </button>
+      
       </div>
     </div>
   );

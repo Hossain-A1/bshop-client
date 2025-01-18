@@ -19,7 +19,7 @@ const Navbar = () => {
 
   return (
     <nav>
-      <div className='flex items-center justify-between border-b py-3 sm:gap-3 gap-2'>
+      <div className='flex  items-center justify-between border-b py-3 sm:gap-3 gap-2'>
         {/* <img width={70} src={assets.logo} alt='logo' /> */}
         <Link onClick={()=>setOpenCtg(false)} href='/' className='sm:text-3xl text-lg font-semibold uppercase'>
           B.Shop
