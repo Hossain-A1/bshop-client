@@ -1,13 +1,17 @@
+"use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { LiaCartPlusSolid } from "react-icons/lia";
 
 const ProductItem = () => {
-  const navigate = useRouter()
+  const navigate = useRouter();
   return (
-    <div className='grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 items-center gap-4 mt-4'>
-      <div className="cursor-pointer" onClick={()=>navigate.push('/bags/:id')}>
+    <div className='grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4   items-center gap-3 mt-4'>
+      <div
+        className='cursor-pointer'
+        onClick={() => navigate.push("/bags/:id")}
+      >
         <div className='h-40 w-full lg:w-80 lg:h-80 overflow-hidden'>
           <Image
             height={720}

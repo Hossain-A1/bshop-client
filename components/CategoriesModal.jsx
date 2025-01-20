@@ -47,7 +47,7 @@ const CategoriesModal = ({ setOpenCtg }) => {
   };
 
   return (
-    <div className='absolute z-20 h-full w-full md:w-[60vw] md:h-96  left-1/2 max-sm:top-[64px] top-[65px] -translate-x-1/2 bg-white shadow-lg rounded'>
+    <div className='absolute z-20 h-full w-full md:w-[60vw] md:h-96  left-1/2 max-sm:top-[64px] top-[65px] -translate-x-1/2 bg-white shadow-lg rounded transition-all duration-500'>
       <div className='flex items-center   h-full w-full'>
         {/* Left Menu */}
         <div className='w-auto lg:w-1/3 border-r pl-4  h-full overflow-y-scroll custom-scrollbar'>

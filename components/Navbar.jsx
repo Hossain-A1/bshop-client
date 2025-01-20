@@ -21,14 +21,18 @@ const Navbar = () => {
     <nav>
       <div className='flex  items-center justify-between border-b py-3 sm:gap-3 gap-2'>
         {/* <img width={70} src={assets.logo} alt='logo' /> */}
-        <Link onClick={()=>setOpenCtg(false)} href='/' className='sm:text-3xl text-lg font-semibold uppercase'>
+        <Link
+          onClick={() => setOpenCtg(false)}
+          href='/'
+          className='sm:text-3xl text-lg font-semibold uppercase'
+        >
           B.Shop
         </Link>
 
         <div className=' sm:max-w-4xl 2xl:w-full lg:flex items-center  gap-3 2xl:gap-10'>
           {pcNavList.map((list, i) => (
             <Link
-            onClick={()=>setOpenCtg(false)}
+              onClick={() => setOpenCtg(false)}
               key={i}
               className='max-lg:hidden sm:w-auto whitespace-nowrap font-medium text-[1rem]'
               href={list.href}
@@ -74,16 +78,19 @@ const Navbar = () => {
           </span>
 
           <span>
-            <FaListUl onClick={()=>setOpenCtg(true)} className=' lg:hidden text-xl cursor-pointer ' />
+            <FaListUl
+              onClick={() => setOpenCtg(true)}
+              className=' lg:hidden text-xl cursor-pointer '
+            />
           </span>
           <span>
-            <FaRegUser onClick={()=>setOpenCtg(false)} className='text-xl' />
+            <FaRegUser onClick={() => setOpenCtg(false)} className='text-xl' />
           </span>
           <div className='relative'>
             <p className='absolute -top-4 right-4 font-bold text-red-600 sm:text-sm text-xs bg-gray-200 py-0.5 px-1 rounded-full '>
               2
             </p>
-            <BiCart onClick={()=>setOpenCtg(false)} className='text-xl' />
+            <BiCart onClick={() => setOpenCtg(false)} className='text-xl' />
           </div>
         </div>
       </div>

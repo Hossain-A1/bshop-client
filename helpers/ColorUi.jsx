@@ -98,17 +98,17 @@ const ProductUI = ({ setViewPicture }) => {
                 handleColorSelect(color.value), setViewPicture(color.image);
               }}
             >
-        <figure className="w-24 h-20 lg:h-28  overflow-hidden">
-        <Image
-                className='rounded-md  h-full w-full  object-cover'
-                src={color.image}
-                alt={color.name}
-                width={280}
-                height={280}
-              />
-        </figure>
+              <figure className='w-24 h-20 lg:h-28  overflow-hidden'>
+                <Image
+                  className=' rounded-tl-md rounded-tr-md h-full w-full  object-cover'
+                  src={color.image}
+                  alt={color.name}
+                  width={280}
+                  height={280}
+                />
+              </figure>
               <p
-                className={`text-center text-sm h-4 mb-1 mt-1 ${
+                className={`text-center text-sm  mb-1 mt-1 ${
                   selectedColor === color.value
                     ? "font-bold text-[#0A8800]"
                     : ""
@@ -141,26 +141,25 @@ const ProductUI = ({ setViewPicture }) => {
 
       {/* Quantity and Add Button */}
       <div className='p-2 flex gap-1 items-center mt-2'>
-          <label htmlFor='quantity' className='text-sm font-medium'>
-            Qty
-          </label>
-          <select
-            id='quantity'
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
-            className='border  rounded-md px-4 py-1'
-          >
-            {[...Array(100)].map((_, index) => (
-              <option
-                className='font-semibold '
-                key={index + 1}
-                value={index + 1}
-              >
-                {index + 1}
-              </option>
-            ))}
-          </select>
-      
+        <label htmlFor='quantity' className='text-sm font-medium'>
+          Qty
+        </label>
+        <select
+          id='quantity'
+          value={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
+          className='border  rounded-md px-4 py-1'
+        >
+          {[...Array(100)].map((_, index) => (
+            <option
+              className='font-semibold '
+              key={index + 1}
+              value={index + 1}
+            >
+              {index + 1}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );
