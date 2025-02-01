@@ -1,8 +1,11 @@
+import ProductItem from '@/components/ProductItem/ProductItem';
 import React from 'react'
 
 const Bags = () => {
   return (
-    <div>Bags</div>
+    <>
+      <ProductItem/>
+    </>
   )
 }
 

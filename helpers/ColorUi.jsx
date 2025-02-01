@@ -98,7 +98,7 @@ const ProductUI = ({ setViewPicture }) => {
                 handleColorSelect(color.value), setViewPicture(color.image);
               }}
             >
-              <figure className='w-24 h-20 lg:h-28  overflow-hidden'>
+              <figure className='w-16 h-16 sm:w-24 sm:h-20 lg:h-28 overflow-hidden '>
                 <Image
                   className=' rounded-tl-md rounded-tr-md h-full w-full  object-cover'
                   src={color.image}

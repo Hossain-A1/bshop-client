@@ -1,12 +1,12 @@
 import ProductDetails from '@/components/ProductDetails';
 import React from 'react'
 
-const page = () => {
+const BabyDescPage = () => {
   return (
     <>
-    <ProductDetails/>
+      <ProductDetails/>
     </>
   )
 }
 
-export default page
+export default BabyDescPage
