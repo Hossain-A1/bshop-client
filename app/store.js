@@ -3,6 +3,7 @@ import productReducer, {
   fetchAllProducts,
 } from "../features/product/productSlice";
 
+
 const store = configureStore({
   reducer: {
     product: productReducer,
@@ -10,5 +11,5 @@ const store = configureStore({
 });
 
 // Dispatch fetchAllProducts for the first load
-store.dispatch(fetchAllProducts({ endpoint: "/list", load: 1, limit: 1 }))
+store.dispatch(fetchAllProducts({ endpoint: "/list", load: 1, limit: 1 }));
 export default store;

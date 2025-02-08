@@ -1,22 +1,38 @@
+import { getSingleProduct } from "@/libs";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const serverURL = 'http://localhost:4000'
+const serverURL = "http://localhost:4000";
 
 // Fetch all products
 export const fetchAllProducts = createAsyncThunk(
   "product/fetchAll",
   async ({ endpoint = "/list", load = 1, limit = 1 }, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`${serverURL}/api/product${endpoint}?load=${load}&limit=${limit}`);
-      
+      const res = await axios.get(
+        `${serverURL}/api/product${endpoint}?load=${load}&limit=${limit}`
+      );
+
       if (res.data.statusCode === 200) {
         return res.data.payload;
       } else {
         return rejectWithValue("Something went wrong");
       }
     } catch (error) {
-      return rejectWithValue(error.response ? error.response.data.message : error.message);
+      return rejectWithValue(
+        error.response ? error.response.data.message : error.message
+      );
+    }
+  }
+);
+// Fetch single product by slug
+export const fetchSingleProduct = createAsyncThunk(
+  "product/fetchSingleProduct",
+  async (slug, { rejectWithValue }) => {
+    try {
+      return await getSingleProduct(slug);
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -24,6 +40,7 @@ export const fetchAllProducts = createAsyncThunk(
 // Initial State
 const initialState = {
   products: [],
+  product: {},
   loading: false,
   error: null,
   pagination: {
@@ -41,13 +58,15 @@ export const productSlice = createSlice({
       state.products = [];
       state.pagination.currentLoad = 1;
     },
+    resetProductDetails: (state) => {
+      state.product = null;
+    },
 
     seeMoreProducts: (state) => {
       if (state.pagination.currentLoad < state.pagination.totalLoad) {
         state.pagination.currentLoad += 1;
       }
     },
-    
   },
   extraReducers: (builder) => {
     builder
@@ -64,7 +83,20 @@ export const productSlice = createSlice({
           totalProducts: action.payload.totalNumberOfProducts,
         };
       })
-      .addCase(fetchAllProducts.rejected, (state, action) => {
+      .addCase(fetchAllProducts.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+      })
+      // single product----------
+      .addCase(fetchSingleProduct.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchSingleProduct.fulfilled, (state, action) => {
+        state.loading = false;
+        state.product = action.payload;
+      })
+      .addCase(fetchSingleProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
@@ -72,5 +104,6 @@ export const productSlice = createSlice({
 });
 
 // Export Actions & Reducer
-export const { resetProducts ,seeMoreProducts} = productSlice.actions;
+export const { resetProducts, resetProductDetails, seeMoreProducts } =
+  productSlice.actions;
 export default productSlice.reducer;
