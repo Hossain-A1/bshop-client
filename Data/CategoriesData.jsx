@@ -1,34 +1,32 @@
-export const ctgData = [
+export const ctgText = [
   {
-    text: "Leather Products",
-    items: [
-      {
-        name: "Leather Shoes",
-        photo:
-          "https://images.pexels.com/photos/292999/pexels-photo-292999.jpeg?auto=compress&cs=tinysrgb&w=600",
-      },
-      {
-        name: "Belt & Wallet",
-        photo:
-          "https://t3.ftcdn.net/jpg/00/58/76/92/240_F_58769292_H3sKHa8WJ2WjsH1U1cJARdcdJAYJSvHZ.jpg",
-      },
-      {
-        name: "Leather Bags",
-        photo:
-          "https://t4.ftcdn.net/jpg/02/86/03/39/240_F_286033919_yHuw1GLVJFlOBaJhVYSmMsC8E7SgUqTJ.jpg",
-      },
-      {
-        name: "Leather Jackets",
-        photo:
-          "https://t4.ftcdn.net/jpg/01/98/00/03/240_F_198000337_TJUXP0zNcGAZlwNaVofAhEELUMf4jkK3.jpg",
-      },
-      {
-        name: "Leather Wallet",
-        photo:
-          "https://img.kwcdn.com/product/fancy/6e6415f1-1825-4ba5-ad72-670018002263.jpg?imageView2/2/w/800/q/70/format/webp",
-      },
-    ],
+    category: "Leather Shoes",
+    photo:
+      "https://images.pexels.com/photos/292999/pexels-photo-292999.jpeg?auto=compress&cs=tinysrgb&w=600",
   },
+  {
+    category: "Belt & Wallet",
+    photo:
+      "https://t3.ftcdn.net/jpg/00/58/76/92/240_F_58769292_H3sKHa8WJ2WjsH1U1cJARdcdJAYJSvHZ.jpg",
+  },
+  {
+    category: "Leather Bags",
+    photo:
+      "https://t4.ftcdn.net/jpg/02/86/03/39/240_F_286033919_yHuw1GLVJFlOBaJhVYSmMsC8E7SgUqTJ.jpg",
+  },
+  {
+    category: "Leather Jackets",
+    photo:
+      "https://t4.ftcdn.net/jpg/01/98/00/03/240_F_198000337_TJUXP0zNcGAZlwNaVofAhEELUMf4jkK3.jpg",
+  },
+  {
+    category: "Leather Wallet",
+    photo:
+      "https://img.kwcdn.com/product/fancy/6e6415f1-1825-4ba5-ad72-670018002263.jpg?imageView2/2/w/800/q/70/format/webp",
+  },
+];
+
+export const ctgData = [
   {
     text: "Home & Kitchen",
     items: [
@@ -121,18 +119,25 @@ export const ctgData = [
   },
 ];
 
-
-export const data =[
-  {_id:121,
-    cover:"https://images.pexels.com/photos/292999/pexels-photo-292999.jpeg?auto=compress&cs=tinysrgb&w=600"
+export const data = [
+  {
+    _id: 121,
+    cover:
+      "https://images.pexels.com/photos/292999/pexels-photo-292999.jpeg?auto=compress&cs=tinysrgb&w=600",
   },
-  {_id:122,
-    cover:"https://images.pexels.com/photos/292999/pexels-photo-292999.jpeg?auto=compress&cs=tinysrgb&w=600"
+  {
+    _id: 122,
+    cover:
+      "https://images.pexels.com/photos/292999/pexels-photo-292999.jpeg?auto=compress&cs=tinysrgb&w=600",
   },
-  {_id:123,
-    cover:"https://images.pexels.com/photos/292999/pexels-photo-292999.jpeg?auto=compress&cs=tinysrgb&w=600"
+  {
+    _id: 123,
+    cover:
+      "https://images.pexels.com/photos/292999/pexels-photo-292999.jpeg?auto=compress&cs=tinysrgb&w=600",
   },
-  {_id:1214,
-    cover:"https://images.pexels.com/photos/292999/pexels-photo-292999.jpeg?auto=compress&cs=tinysrgb&w=600"
+  {
+    _id: 1214,
+    cover:
+      "https://images.pexels.com/photos/292999/pexels-photo-292999.jpeg?auto=compress&cs=tinysrgb&w=600",
   },
-]
+];

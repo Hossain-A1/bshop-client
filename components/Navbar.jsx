@@ -9,13 +9,25 @@ import Link from "next/link";
 import CategoriesModal from "./CategoriesModal";
 import { useState } from "react";
 import Overlay from "./Overlay";
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 const Navbar = () => {
-  const [openCtg, setOpenCtg] = useState(false);
+  const {cartItems}= useSelector((state)=>state.cart)
+   const [openCtg, setOpenCtg] = useState(false);
+  const router = useRouter();
   const pcNavList = [
     { label: "Leather items", href: "/leather-items" },
     { label: "Best Sellers", href: "/best-sellers" },
     { label: "New Arrivals", href: "/new-arrivals" },
   ];
+
+  const handleNavigate = () => {
+    router.push("/cart");
+    if (openCtg) {
+      setOpenCtg(false);
+    }
+    return;
+  };
 
   return (
     <nav>
@@ -86,11 +98,12 @@ const Navbar = () => {
           <span>
             <FaRegUser onClick={() => setOpenCtg(false)} className='text-xl' />
           </span>
-          <div className='relative'>
+          <div onClick={handleNavigate} className='relative'>
             <p className='absolute -top-4 right-4 font-bold text-red-600 sm:text-sm text-xs bg-gray-200 py-0.5 px-1 rounded-full '>
-              2
+              
+              {cartItems.length}
             </p>
-            <BiCart onClick={() => setOpenCtg(false)} className='text-xl' />
+            <BiCart className='text-xl' />
           </div>
         </div>
       </div>

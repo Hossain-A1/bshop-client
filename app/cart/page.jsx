@@ -1,137 +1,88 @@
-import React from "react";
+"use client";
 import { FaTrash } from "react-icons/fa";
 import Image from "next/image";
-import ProductItem from "@/components/ProductItem/ProductItem";
+import { useSelector, useDispatch } from "react-redux";
+import { removeFromCart } from "@/features/cart/cartSlice";
 
 const CartPage = () => {
+  const { cartItems = [] } = useSelector((state) => state.cart);
+  console.log(cartItems);
+  const dispatch = useDispatch();
+
+  const removeFromCartHandler = (cartItems) => {
+    dispatch(removeFromCart({
+      _id: cartItems._id,
+      selectedSize: cartItems.selectedSize,
+      selectedColor: cartItems.selectedColor
+    }));
+  };
+  
+
   return (
     <div className="min-h-screen p-4">
-      <div className="flex max-sm:flex-col gap-3 sm:gap-4 justify-between w-full relative">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
         {/* Left: Product List */}
-        <div className="p-4 space-y-4 lg:w-3/4 w-full overflow-y-scroll hidden-scroll max-h-[calc(100vh-4rem)] pr-4">
+        <div className="p-4 space-y-4 lg:w-3/4 w-full max-h-[75vh] overflow-y-auto hidden-scroll">
           {/* Header */}
-          <div className="border-b p-4 flex justify-between items-center">
+          <div className="border-b pb-3 flex justify-between items-center">
             <h2 className="text-lg font-semibold">Cart</h2>
-            <span className="text-green-600 text-sm">
-              Free shipping special for you
-            </span>
+            <span className="text-green-600 text-sm">Free shipping special for you</span>
           </div>
 
-          {/* Item 1 */}
-          <div className="flex items-center justify-between border-b pb-4">
-            <div className="flex items-center">
-              <Image
-                src="/path-to-image.jpg"
-                alt="Product"
-                width={80}
-                height={80}
-                className="object-cover rounded-md"
-              />
-              <div className="ml-4">
-                <p className="text-sm font-medium">
-                  1pc Large Capacity Travel Backpack
-                </p>
-                <p className="text-gray-600 text-xs">Blue</p>
-                <p className="text-orange-500 text-sm font-semibold">
-                  SAR26.68{" "}
-                  <span className="line-through text-gray-400">60.49</span> -55%
-                </p>
-                <p className="text-red-500 text-xs">ALMOST SOLD OUT</p>
+          {/* Cart Items */}
+          {cartItems.length>0 && cartItems.map((item) => (
+            <div
+            key={`${item._id}-${item.selectedSize}-${item.selectedColor.name}`}
+              className="flex flex-col sm:flex-row items-center sm:justify-between border-b pb-4 gap-4"
+            >
+              <div className="flex items-center gap-4">
+                <Image
+                  src={item.images}
+                  alt={item.title}
+                  width={80}
+                  height={80}
+                  className="object-cover rounded-md"
+                />
+                <div>
+                  <p className="text-sm font-medium">{item.title}</p>
+                  <p className="text-gray-600 text-xs">Color: {item.selectedColor?.name}</p>
+                  <p className="text-gray-600 text-xs">Size: {item.selectedSize}</p>
+                  <p className="text-orange-500 text-sm font-semibold">${item.price}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <span className="text-sm">Qty: {item.quantity}</span>
+                <button
+                  className="text-red-500 hover:text-red-700"
+                  onClick={() => removeFromCartHandler(item)}
+                >
+                  <FaTrash />
+                </button>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <select className="border rounded-md p-1">
-                <option value="1">Qty 1</option>
-                <option value="2">Qty 2</option>
-              </select>
-              <button className="text-red-500 hover:text-red-700">
-                <FaTrash />
-              </button>
-            </div>
-          </div>
-
-          {/* Item 2 */}
-          <div className="flex items-center justify-between border-b pb-4">
-            <div className="flex items-center">
-              <Image
-                src="/path-to-image.jpg"
-                alt="Product"
-                width={80}
-                height={80}
-                className="object-cover rounded-md"
-              />
-              <div className="ml-4">
-                <p className="text-sm font-medium">
-                  3pcs Enamel Home Kitchen Soup Pot
-                </p>
-                <p className="text-gray-600 text-xs">
-                  16/18/20 Blue Hemp Dot Set Pot
-                </p>
-                <p className="text-orange-500 text-sm font-semibold">
-                  SAR132.79{" "}
-                  <span className="line-through text-gray-400">187.79</span>{" "}
-                  -29%
-                </p>
-                <p className="text-red-500 text-xs">May sell out tomorrow</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <select className="border rounded-md p-1">
-                <option value="1">Qty 1</option>
-                <option value="2">Qty 2</option>
-              </select>
-              <button className="text-red-500 hover:text-red-700">
-                <FaTrash />
-              </button>
-            </div>
-          </div>
-
-          {/* Explore Section */}
-          <div className="hidden lg:block py-2 overflow-hidden">
-            <h2 className="font-medium text-lg sm:text-xl">Explore B.shop picks</h2>
-            <ProductItem />
-          </div>
+          ))}
         </div>
 
         {/* Right: Order Summary */}
-        <div className="p-4  lg:w-1/4 w-full lg:sticky top-0">
+        <div className="p-4 lg:w-1/4 w-full border rounded-md shadow-md sticky top-4 bg-white">
+          <h2 className="font-semibold text-lg mb-4">Order Summary</h2>
           <div className="flex justify-between mb-2">
-            <span className="text-gray-600">Item(s) total:</span>
-            <span>SAR464.77</span>
-          </div>
-          <div className="flex justify-between mb-2">
-            <span className="text-gray-600">Item(s) discount:</span>
-            <span className="text-red-500">-SAR198.85</span>
+            <span className="text-gray-600">Total Items:</span>
+            <span>{cartItems&& cartItems.reduce((acc, item) => acc + item.quantity, 0)}</span>
           </div>
           <div className="flex justify-between font-semibold text-lg">
             <span>Total:</span>
-            <span>SAR265.92</span>
+            <span>
+              $
+              {cartItems&& cartItems.reduce(
+                (acc, item) => acc + item.price * item.quantity,
+                0
+              )}
+            </span>
           </div>
-          <p className="text-sm text-gray-500 mt-2">
-            4 interest-free installments of SAR66.48 with{" "}
-            <span className="text-blue-500">Tabby</span> or{" "}
-            <span className="text-blue-500">Tamara</span>
-          </p>
-
-          {/* Buttons */}
-          <div className="mt-4">
-            <button className="w-full bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 mb-2">
-              3 almost sold out - Checkout (3)
-            </button>
-            <button className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 flex items-center justify-center space-x-2">
-              <span>Express checkout with</span>
-              <Image
-                src="/paypal-logo.png"
-                alt="PayPal"
-                width={50}
-                height={20}
-              />
-            </button>
-          </div>
-
-          <p className="text-xs text-gray-500 text-center mt-4">
-            You will not be charged until you review this order on the next page
-          </p>
+          <button className="w-full bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 mt-4">
+            Checkout
+          </button>
         </div>
       </div>
     </div>

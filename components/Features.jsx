@@ -1,39 +1,15 @@
 "use client";
-import React, { useState, useRef } from "react";
-import LeatherProducts from "./LeatherProducts";
-import HomeAndKitchen from "./HomeAndKitchen";
-import FoodAndGrocery from "./FoodAndGrocery";
-import MenClothing from "./MenClothing";
-import MenShoes from "./MenShoes";
-import WomenClothing from "./WomenClothing";
-import WomenShoes from "./WomenShoes";
-import KidsFashion from "./KidsFashion";
-import Electronics from "./Electronics";
-import ToolsAndHomeUse from "./ToolsAndHomeUse";
-import { ctgData } from "@/data/CategoriesData";
-import ProductItem from "./ProductItem/ProductItem";
-
+import { useState, useRef } from "react";
 import {
   MdOutlineKeyboardArrowRight,
   MdOutlineKeyboardArrowLeft,
 } from "react-icons/md";
+import FeatureProducts from "./FeatureProducts";
+import { ctgText } from "@/data/CategoriesData";
 
 const Features = () => {
-  const [activeCategory, setActiveCategory] = useState("Leather Products");
+  const [activeCategory, setActiveCategory] = useState("All");
   const scrollContainer = useRef(null); // Ref to the scrollable container
-
-  const categoryComponents = {
-    "Leather Products": <LeatherProducts />,
-    "Home & Kitchen": <ProductItem />,
-    "Food & Grocery": <FoodAndGrocery />,
-    "Men's Clothing": <MenClothing />,
-    "Men's Shoes": <MenShoes />,
-    "Women's Clothing": <WomenClothing />,
-    "Women's Shoes": <WomenShoes />,
-    "Kids Fashion": <KidsFashion />,
-    Electronics: <Electronics />,
-    "Tools & Home Use": <ToolsAndHomeUse />,
-  };
 
   // Scroll Left
   const handleScrollLeft = () => {
@@ -76,18 +52,18 @@ const Features = () => {
           ref={scrollContainer}
           className='flex items-center gap-4 overflow-x-scroll hidden-scroll px-10'
         >
-          {ctgData.map((item, i) => (
-            <p
-              className={`cursor-pointer lg:px-8 px-4 font-medium lg:text-sm text-xs whitespace-nowrap lg:py-4 
+          {ctgText.map((item,i) => (
+              <p
+                key={i}
+                className={`cursor-pointer lg:px-8 px-4 font-medium lg:text-sm text-xs whitespace-nowrap lg:py-4 
                  py-2 rounded-full shadow-sm border hover:shadow-md ${
-                   activeCategory === item.text ? "bg-gray-300" : ""
+                   activeCategory === item.category ? "bg-gray-300" : ""
                  }`}
-              onClick={() => setActiveCategory(item.text)}
-              key={i}
-            >
-              {item.text}
-            </p>
-          ))}
+                onClick={() => setActiveCategory(item.category)}
+              >
+                {item.category}
+              </p>
+            ))}
         </div>
 
         {/* Right Arrow */}
@@ -100,7 +76,9 @@ const Features = () => {
       </div>
 
       {/* Active Category Content */}
-      <div className='mt-6'>{categoryComponents[activeCategory]}</div>
+      <div className='mt-6'>
+        <FeatureProducts />
+      </div>
     </div>
   );
 };

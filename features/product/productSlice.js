@@ -7,7 +7,7 @@ const serverURL = "http://localhost:4000";
 // Fetch all products
 export const fetchAllProducts = createAsyncThunk(
   "product/fetchAll",
-  async ({ endpoint = "/list", load = 1, limit = 1 }, { rejectWithValue }) => {
+  async ({ endpoint = "/list", load = 1, limit = 10 }, { rejectWithValue }) => {
     try {
       const res = await axios.get(
         `${serverURL}/api/product${endpoint}?load=${load}&limit=${limit}`

@@ -8,24 +8,25 @@ export default function RootLayout({ children }) {
   return (
     <html lang='en'>
       <body>
-        <main className='px-2.5 sm:px-8 md:px-10 lg:px-16 min-h-screen bg-bg_color'>
+        <main className='px-2.5 sm:px-8 md:px-10 lg:px-12 min-h-screen bg-bg_color'>
           {/* Navbar */}
-          <div className='flex flex-col'>
-            <Navbar />
+          <ReduxProvider>
+            <div className='flex flex-col'>
+              <Navbar />
 
-            {/* Responsive Page List */}
-            <div className='sm:hidden block'>
-              <AllPageList />
+              {/* Responsive Page List */}
+              <div className='sm:hidden block'>
+                <AllPageList />
+              </div>
             </div>
-          </div>
 
-          {/* Main Content */}
+            {/* Main Content */}
 
-          <ReduxProvider>{children}</ReduxProvider>
+            {children}
+            {/* Footer */}
+            <Footer />
+          </ReduxProvider>
         </main>
-
-        {/* Footer */}
-        <Footer />
       </body>
     </html>
   );

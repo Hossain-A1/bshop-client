@@ -21,7 +21,7 @@ const All = () => {
         fetchAllProducts({
           endpoint: "/list",
           load: pagination.currentLoad + 1,
-          limit: 1,
+          limit: 10,
         })
       );
     }

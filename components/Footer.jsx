@@ -52,7 +52,7 @@ const Footer = () => {
             <li>Coupons & offers alerts</li>
           </ul>
           <div className="flex gap-2 mt-4">
-            <img
+            {/* <img
               src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Apple_app_store_badge.svg"
               alt="App Store"
               className="w-24"
@@ -61,7 +61,7 @@ const Footer = () => {
               src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
               alt="Google Play"
               className="w-24"
-            />
+            /> */}
           </div>
         </div>
       </div>
@@ -72,7 +72,7 @@ const Footer = () => {
           {/* Security Certifications */}
           <div>
             <h3 className="font-bold mb-4">Security certification</h3>
-            <div className="flex gap-2 flex-wrap">
+            {/* <div className="flex gap-2 flex-wrap">
               <img
                 src="https://via.placeholder.com/40x20"
                 alt="Security 1"
@@ -88,13 +88,13 @@ const Footer = () => {
                 alt="Security 3"
                 className="w-16 h-auto"
               />
-            </div>
+            </div> */}
           </div>
 
           {/* Payment Methods */}
           <div>
             <h3 className="font-bold mb-4">We accept</h3>
-            <div className="flex gap-2 flex-wrap">
+            {/* <div className="flex gap-2 flex-wrap">
               <img
                 src="https://via.placeholder.com/40x20"
                 alt="Visa"
@@ -110,7 +110,7 @@ const Footer = () => {
                 alt="PayPal"
                 className="w-16 h-auto"
               />
-            </div>
+            </div> */}
           </div>
 
           {/* Social Media */}

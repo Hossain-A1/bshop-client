@@ -28,4 +28,20 @@
   overflow: hidden;
   height: 100vh;
 }
+/* Zoom & Pan Image Styles */
+.zoom-container {
+  position: relative;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+
+.zoomed {
+  cursor: grab;
+}
+
+.image-move {
+  transition: transform 0.1s ease-out;
+}
+
+
 
