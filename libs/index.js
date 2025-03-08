@@ -14,3 +14,4 @@ export const getSingleProduct = async (slug) => {
     throw error.response?.data?.message || error.message; // 🔥 Throw error for Redux rejection
   }
 };
+

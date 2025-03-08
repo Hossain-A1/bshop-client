@@ -11,9 +11,12 @@ import { useState } from "react";
 import Overlay from "./Overlay";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
+import Login from "./ui/Login";
 const Navbar = () => {
   const {cartItems}= useSelector((state)=>state.cart)
    const [openCtg, setOpenCtg] = useState(false);
+   const [token, setToken] = useState(false);
+   const [user, setUser] = useState(false);
   const router = useRouter();
   const pcNavList = [
     { label: "Leather items", href: "/leather-items" },
@@ -69,7 +72,7 @@ const Navbar = () => {
 
             {openCtg && (
               <div>
-                <CategoriesModal setOpenCtg={setOpenCtg} />
+                {/* <CategoriesModal setOpenCtg={setOpenCtg} /> */}
                 <Overlay setOpenCtg={setOpenCtg} />
               </div>
             )}
@@ -95,8 +98,8 @@ const Navbar = () => {
               className=' lg:hidden text-xl cursor-pointer '
             />
           </span>
-          <span>
-            <FaRegUser onClick={() => setOpenCtg(false)} className='text-xl' />
+          <span  onClick={() => setOpenCtg(true)}>
+            <FaRegUser className='text-xl' />
           </span>
           <div onClick={handleNavigate} className='relative'>
             <p className='absolute -top-4 right-4 font-bold text-red-600 sm:text-sm text-xs bg-gray-200 py-0.5 px-1 rounded-full '>
@@ -107,6 +110,10 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      <section>
+        {openCtg &&(<Login setOpenCtg={setOpenCtg} setToken={setToken} setUser={setUser} />)}
+      </section>
     </nav>
   );
 };

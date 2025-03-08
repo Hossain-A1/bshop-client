@@ -3,11 +3,10 @@ import productReducer, {
   fetchAllProducts,
 } from "../features/product/productSlice";
 import cartReducer from '../features/cart/cartSlice'
-
 const store = configureStore({
   reducer: {
     product: productReducer,
-    cart:cartReducer
+    cart:cartReducer,
   },
 });
 
