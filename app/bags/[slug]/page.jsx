@@ -10,14 +10,14 @@ const BagDetailsPage = () => {
 
   return (
     <>
-      {product && (
+      {/* {product && (
         <ProductDetails
           product={product}
           loading={loading}
           error={error}
           slug={slug}
         />
-      )}
+      )} */}
     </>
   );
 };

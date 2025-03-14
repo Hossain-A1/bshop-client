@@ -1,6 +1,7 @@
 "use client";
-import { getTotalAmount, getTotalItems } from "@/utils";
 import axios from "axios";
+import toast from "react-hot-toast";
+import { getTotalAmount, getTotalItems } from "@/utils";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
@@ -25,13 +26,49 @@ const PlaceOrder = () => {
     landmark: "",
     address: "",
   });
-  console.log(formData.union);
   const serverURL = "http://localhost:4000";
+  const deliveryCharge =
+    cartItems.length === 1 ? 100 : 100 + (cartItems.length - 1) * 30;
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  const saveUserAddress = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await axios.put(
+        serverURL + "/api/auth/save/address",
+        { formData },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (res.data.success) {
+        toast.success("Address saved");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const payWithBkash = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:4000/api/bkash/payment/create",
+        { amount: getTotalAmount(cartItems) + deliveryCharge, orderId: 1 },
+        { withCredentials: true }
+      );
+      window.location.href = res.data.bkashURL;
+      if (res.data.statusCode === "0000") {
+        localStorage.removeItem("cart");
+      }
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
+
+  //later i will do it
+  const payWithNagad = async () => {};
 
   // Fetch address data
   useEffect(() => {
@@ -52,7 +89,6 @@ const PlaceOrder = () => {
 
     fetchFullAddress();
   }, []);
-  console.log(formData.upazila);
 
   // Filter districts based on selected division
   useEffect(() => {
@@ -93,12 +129,10 @@ const PlaceOrder = () => {
       setFormData((prev) => ({ ...prev, union: "" }));
     }
   }, [formData.upazila, unions]);
-  console.log(filteredUnions);
-  console.log(filteredUpazilas);
   return (
-    <div className='flex flex-col lg:flex-row gap-8 p-0 sm:p-6 bg-gray-100 h-auto'>
+    <form className='flex flex-col lg:flex-row gap-8 p-0 sm:p-6 bg-gray-100 h-auto'>
       {/* Delivery Information */}
-      <form className='bg-white p-6 rounded-lg shadow-md w-full lg:w-2/3'>
+      <div className='bg-white p-2 sm:p-6 rounded-lg shadow-md w-full lg:w-2/3'>
         <h2 className='text-lg font-semibold mb-4'>Delivery Information</h2>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
           {[
@@ -152,10 +186,7 @@ const PlaceOrder = () => {
               <option value=''></option>
               {divisions.length > 0 &&
                 divisions.map((div) => (
-                  <option
-                    key={div.id}
-                    value={div.id}
-                  >
+                  <option key={div.id} value={div.id}>
                     {div.name}
                   </option>
                 ))}
@@ -168,8 +199,9 @@ const PlaceOrder = () => {
               required='Districts is required!'
               value={formData.district}
               onChange={onChangeHandler}
-              className={`w-full border px-3 py-2 rounded text-sm ${!formData.division ?"cursor-not-allowed":"cursor-pointer"} `}
-            
+              className={`w-full border px-3 py-2 rounded text-sm ${
+                !formData.division ? "cursor-not-allowed" : "cursor-pointer"
+              } `}
               disabled={!formData.division}
             >
               <option value=''></option>
@@ -187,7 +219,9 @@ const PlaceOrder = () => {
               value={formData.upazila}
               required='Upazila is required!'
               onChange={onChangeHandler}
-              className={`w-full border px-3 py-2 rounded text-sm ${!formData.district ?"cursor-not-allowed":"cursor-pointer"} `}
+              className={`w-full border px-3 py-2 rounded text-sm ${
+                !formData.district ? "cursor-not-allowed" : "cursor-pointer"
+              } `}
               disabled={!formData.district}
             >
               <option value=''></option>
@@ -205,7 +239,9 @@ const PlaceOrder = () => {
               value={formData.union}
               required='Union is required!'
               onChange={onChangeHandler}
-              className={`w-full border px-3 py-2 rounded text-sm ${!formData.upazila ?"cursor-not-allowed":"cursor-pointer"} `}
+              className={`w-full border px-3 py-2 rounded text-sm ${
+                !formData.upazila ? "cursor-not-allowed" : "cursor-pointer"
+              } `}
               disabled={!formData.upazila}
             >
               <option value=''></option>
@@ -237,7 +273,9 @@ const PlaceOrder = () => {
               key={value}
               onClick={() => setMethod(value)}
               className={`px-4 py-2 rounded border text-sm ${
-                method === value ? "border-blue-500" : "border-gray-300"
+                method === value
+                  ? "border-blue-500 border-2  border-t-red-500"
+                  : "border-gray-300"
               }`}
             >
               {label}
@@ -245,12 +283,12 @@ const PlaceOrder = () => {
           ))}
         </div>
         <button
-          type='submit'
+          onClick={saveUserAddress}
           className='w-full mt-4 bg-blue-500 text-white py-2 rounded text-sm'
         >
           SAVE
         </button>
-      </form>
+      </div>
 
       {/* Order Summary */}
       <div className='bg-white p-6 rounded-lg shadow-md w-full lg:w-1/3'>
@@ -263,22 +301,29 @@ const PlaceOrder = () => {
         </div>
         <div className='flex justify-between mb-2 text-sm'>
           <span>Delivery Fee:</span>
-          <span>৳ 100</span>
+          <span>৳ {deliveryCharge}</span>
         </div>
         <div className='flex justify-between font-semibold text-lg'>
           <span>Total:</span>
           <span className='text-orange-500'>
-            ৳ {cartItems && getTotalAmount(cartItems) + 100}
+            ৳ {cartItems && getTotalAmount(cartItems) + deliveryCharge}
           </span>
         </div>
         <button
-          className='w-full mt-4 bg-gray-400 text-white py-2 rounded text-sm cursor-not-allowed'
-          disabled
+          disabled={!formData}
+          onClick={payWithBkash}
+          className='w-full mt-4 bg-green-700 text-white py-2 rounded text-sm lg:text-lg cursor-pointer'
         >
-          Proceed to Pay
+          Pay with Bkash
+        </button>
+        <button
+          onClick={payWithNagad}
+          className='w-full mt-4 bg-green-700 text-white py-2 rounded text-sm lg:text-lg cursor-pointer'
+        >
+          Pay with Nagod
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 

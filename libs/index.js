@@ -15,3 +15,17 @@ export const getSingleProduct = async (slug) => {
   }
 };
 
+
+export const handleAddToCart = async (count,token) => {
+  try {
+    const res = await axios.post(serverURL+'/api/cart/add',{count},{headers:{Authorization:`Bearer ${token}`}});
+
+    return res.data.payload.items
+  } catch (error) {
+    console.log(
+      "❌ API Fetch Error:",
+    );
+    throw error.response?.data?.message || error.message; // 🔥 Throw error for Redux rejection
+  }
+};
+

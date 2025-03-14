@@ -12,10 +12,10 @@ import Error from "./ui/Error";
 import {
   fetchSingleProduct,
 } from "@/features/product/productSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-const ProductDetails = ({ product, loading, error, slug }) => {
-  const router = useRouter();
+const ProductDetails = ({ slug }) => {
+  const { product, loading, error } = useSelector((state) => state.product);
   const dispatch = useDispatch();
 
   const {
