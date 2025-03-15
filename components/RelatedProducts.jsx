@@ -3,10 +3,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { LiaCartPlusSolid } from "react-icons/lia";
 import {  useSelector } from "react-redux";
-import Loading from "../ui/Loading";
-import Error from "../ui/Error";
+import Loading from "./ui/Loading";
+import Error from "./ui/Error";
 
-const ProductItem = () => {
+const RelatedProducts = ({category}) => {
   const navigate = useRouter();
   const { products, loading, error } = useSelector((state) => state.product);
 
@@ -22,11 +22,11 @@ const ProductItem = () => {
 
       <div className='grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4   items-center gap-3 mt-4'>
         {products.length > 0 &&
-          products.map((item) => (
+          products.filter((item)=>item.category === category).map((item) => (
             <div
               key={item._id}
               className='cursor-pointer bg-slate-100'
-              onClick={() => navigate.push(`/product/${slugify(item.category)}/${item.slug}`)}
+              onClick={() => navigate.push(`/${slugify(item.category)}/${item.slug}`)}
 
 
             >
@@ -64,4 +64,4 @@ const ProductItem = () => {
   );
 };
 
-export default ProductItem;
+export default RelatedProducts

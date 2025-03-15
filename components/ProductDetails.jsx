@@ -13,6 +13,7 @@ import {
   fetchSingleProduct,
 } from "@/features/product/productSlice";
 import { useDispatch, useSelector } from "react-redux";
+import RelatedProducts from "./RelatedProducts";
 
 const ProductDetails = ({ slug }) => {
   const { product, loading, error } = useSelector((state) => state.product);
@@ -186,7 +187,7 @@ if(images.length>0 &&images[0]){
         {/* Suggested Products */}
         <div className="mt-5 space-y-3">
           <h2 className="font-medium text-lg sm:text-xl">You May Also Like</h2>
-          <ProductItem />
+          <RelatedProducts category={product.category} />
         </div>
       </div>
     </>

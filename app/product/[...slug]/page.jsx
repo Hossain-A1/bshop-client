@@ -10,6 +10,7 @@ const DynamicProductPage = () => {
   const productSlug = slug[1]; // Extract only the product slug
 
   return <ProductDetails slug={productSlug} />;
+ 
 };
 
 export default DynamicProductPage;
