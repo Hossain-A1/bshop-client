@@ -4,17 +4,17 @@ import { FaRegUser } from "react-icons/fa6";
 import { BiCart } from "react-icons/bi";
 import { CiSearch } from "react-icons/ci";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-
 import Link from "next/link";
-import CategoriesModal from "./CategoriesModal";
 import { useState } from "react";
 import Overlay from "./Overlay";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import Login from "./ui/Login";
+import CategoriesModal from "./CategoriesModal";
 const Navbar = () => {
   const {cartItems}= useSelector((state)=>state.cart)
    const [openCtg, setOpenCtg] = useState(false);
+   const [openModal, setOpenModal] = useState(false);
    const [token, setToken] = useState(false);
    const [user, setUser] = useState(false);
   const router = useRouter();
@@ -70,10 +70,10 @@ const Navbar = () => {
               />
             </p>
 
-            {openCtg && (
+            {openModal && (
               <div>
                 {/* <CategoriesModal setOpenCtg={setOpenCtg} /> */}
-                <Overlay setOpenCtg={setOpenCtg} />
+                <Overlay setOpenModal={setOpenModal} />
               </div>
             )}
           </div>
@@ -97,8 +97,11 @@ const Navbar = () => {
               onClick={() => setOpenCtg(true)}
               className=' lg:hidden text-xl cursor-pointer '
             />
+            {
+              openCtg &&<CategoriesModal openCtg={openCtg} setOpenCtg={setOpenCtg}/>
+            }
           </span>
-          <span  onClick={() => setOpenCtg(true)}>
+          <span  onClick={() => setOpenModal(true)}>
             <FaRegUser className='text-xl' />
           </span>
           <div onClick={handleNavigate} className='relative'>
@@ -112,7 +115,7 @@ const Navbar = () => {
       </div>
 
       <section>
-        {openCtg &&(<Login setOpenCtg={setOpenCtg} setToken={setToken} setUser={setUser} />)}
+        {openModal &&(<Login setOpenModal={setOpenModal} setToken={setToken} setUser={setUser} />)}
       </section>
     </nav>
   );

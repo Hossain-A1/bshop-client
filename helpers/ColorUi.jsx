@@ -108,6 +108,7 @@ const ProductUI = ({
                     <figure className='w-16 h-16 sm:w-24 sm:h-20 lg:h-28 overflow-hidden'>
                       <Image
                         className='rounded-tl-md rounded-tr-md h-full w-full object-fill'
+                        priority
                         src={colorImages[i]}
                         alt={color}
                         width={280}

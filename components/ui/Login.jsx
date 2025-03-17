@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
+import { MdClose } from "react-icons/md";
 
-const Login = ({ setOpenCtg, setToken, setUser }) => {
+const Login = ({ setOpenModal, setToken, setUser }) => {
   const backendUrl = "http://localhost:4000";
   const [state, setState] = useState("Login");
   const [focusedField, setFocusedField] = useState(null); // Track focused input
@@ -46,6 +47,7 @@ const Login = ({ setOpenCtg, setToken, setUser }) => {
         onSubmit={handleGetStarted}
         className="relative bg-white p-10 rounded-xl text-slate-700"
       >
+        <span onClick={()=>setOpenModal(false)} className="absolute right-2 top-2 p-2 rounded-full border"><MdClose/></span>
         <h1 className="text-center text-2xl text-neutral-700 font-medium">
           {state}
         </h1>
