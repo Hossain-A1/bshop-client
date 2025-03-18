@@ -1,10 +1,11 @@
 "use client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 
 const FeatureProducts = () => {
   const { products} = useSelector((state) => state.product);
-
+const navigate = useRouter()
   // Get the first product for each category
   const uniqueCategories = {};
   const filteredProducts = products.filter((item) => {
@@ -15,13 +16,23 @@ const FeatureProducts = () => {
     return false;
   });
 
+    // ✅ Slugify function
+    const slugify = (text) => {
+      if (!text) return "";
+      return text
+        .toLowerCase()
+        .replace(/[\s&']+/g, "-") // Convert spaces, "&", and apostrophes to "-"
+        .replace(/[^a-z0-9-]/g, ""); // Remove special characters
+    };
+
   return (
     <div className="w-full md:pl-4 grid lg:grid-cols-4 xl:grid-cols-5 mt-2 grid-cols-3 gap-2.5 lg:gap-4">
       {filteredProducts.map((item) => (
-        <div key={item._id} className="flex flex-col items-center group">
+        <div onClick={()=> navigate.push(`/category/${slugify(item.category)}`)} key={item._id} className="flex flex-col items-center group">
           <Image
             height={400}
             width={400}
+            priority
             src={item.images[0] || "/default.jpg"} // Ensure a fallback image
             alt={item.title}
             className="sm:w-20 sm:h-20 w-14 h-14 object-cover rounded-full group-hover:scale-105 transition-all duration-300"

@@ -30,7 +30,7 @@ const CategoriesModal = ({ openCtg,setOpenCtg }) => {
             {categories.map((category, index) => (
               <li
                 key={index}
-                className={`flex justify-between items-center cursor-pointer text-xs md:text-sm lg:text-lg font-medium ${
+                className={`flex justify-between items-center cursor-pointer text-xs md:text-[1.10rem] ${
                   activeCategory === category ? "text-blue-500" : ""
                 }`}
                 onMouseEnter={() => setActiveCategory(category)}

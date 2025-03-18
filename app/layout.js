@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import AllPageList from "@/components/AllPageList";
 import Footer from "@/components/Footer";
 import { ReduxProvider } from "@/provider/ReduxProvider";
+import { Toaster } from "react-hot-toast";
 
 export default function RootLayout({ children }) {
   return (
@@ -10,6 +11,7 @@ export default function RootLayout({ children }) {
       <body>
         <main className='px-2.5 sm:px-8 md:px-10 lg:px-12 min-h-screen bg-bg_color'>
           {/* Navbar */}
+          <Toaster/>
           <ReduxProvider>
             <div className='flex flex-col'>
               <Navbar />

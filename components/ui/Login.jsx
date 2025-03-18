@@ -1,9 +1,15 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MdClose } from "react-icons/md";
 
 const Login = ({ setOpenModal, setToken, setUser }) => {
+    useEffect(() => {
+      document.body.classList.add("no-scroll");
+      return () => {
+        document.body.classList.remove("no-scroll");
+      };
+    }, []);
   const backendUrl = "http://localhost:4000";
   const [state, setState] = useState("Login");
   const [focusedField, setFocusedField] = useState(null); // Track focused input
@@ -31,18 +37,17 @@ const Login = ({ setOpenModal, setToken, setUser }) => {
         setToken(res.payload.token);
         setUser(res.payload.name);
         localStorage.setItem("token", res.payload.token);
-        setOpenCtg(false);
+        setOpenModal(false);
       } else {
         alert(res.message);
       }
     } catch (error) {
       console.error(error.message);
-      alert("An error occurred. Please try again.");
     }
   };
 
   return (
-    <div className="fixed left-0 top-0 right-0 bottom-0 z-10 backdrop-blur-sm bg-black/30 flex justify-center items-center">
+    <div className="fixed left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 no-scroll z-50  flex justify-center items-center">
       <form
         onSubmit={handleGetStarted}
         className="relative bg-white p-10 rounded-xl text-slate-700"

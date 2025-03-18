@@ -12,11 +12,11 @@ import { useSelector } from "react-redux";
 import Login from "./ui/Login";
 import CategoriesModal from "./CategoriesModal";
 const Navbar = () => {
-  const {cartItems}= useSelector((state)=>state.cart)
-   const [openCtg, setOpenCtg] = useState(false);
-   const [openModal, setOpenModal] = useState(false);
-   const [token, setToken] = useState(false);
-   const [user, setUser] = useState(false);
+  const { cartItems } = useSelector((state) => state.cart);
+  const [openCtg, setOpenCtg] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [user, setUser] = useState(false);
   const router = useRouter();
   const pcNavList = [
     { label: "Leather items", href: "/leather-items" },
@@ -25,11 +25,11 @@ const Navbar = () => {
   ];
 
   const handleNavigate = () => {
-    router.push("/cart");
-    if (openCtg) {
-      setOpenCtg(false);
+    if (cartItems.length <= 0 && !token) {
+      setOpenModal(true);
+    } else {
+      router.push("/cart");
     }
-    return;
   };
 
   return (
@@ -69,13 +69,6 @@ const Navbar = () => {
                 } `}
               />
             </p>
-
-            {openModal && (
-              <div>
-                {/* <CategoriesModal setOpenCtg={setOpenCtg} /> */}
-                <Overlay setOpenModal={setOpenModal} />
-              </div>
-            )}
           </div>
         </div>
 
@@ -97,16 +90,15 @@ const Navbar = () => {
               onClick={() => setOpenCtg(true)}
               className=' lg:hidden text-xl cursor-pointer '
             />
-            {
-              openCtg &&<CategoriesModal openCtg={openCtg} setOpenCtg={setOpenCtg}/>
-            }
+            {openCtg && (
+              <CategoriesModal openCtg={openCtg} setOpenCtg={setOpenCtg} />
+            )}
           </span>
-          <span  onClick={() => setOpenModal(true)}>
+          <span onClick={() => setOpenModal(true)}>
             <FaRegUser className='text-xl' />
           </span>
           <div onClick={handleNavigate} className='relative'>
             <p className='absolute -top-4 right-4 font-bold text-red-600 sm:text-sm text-xs bg-gray-200 py-0.5 px-1 rounded-full '>
-              
               {cartItems.length}
             </p>
             <BiCart className='text-xl' />
@@ -115,7 +107,23 @@ const Navbar = () => {
       </div>
 
       <section>
-        {openModal &&(<Login setOpenModal={setOpenModal} setToken={setToken} setUser={setUser} />)}
+        {/* Render Overlay if either openCtg or openModal is true */}
+        {(openCtg || openModal) && (
+          <Overlay
+            openCtg={openCtg}
+            setOpenCtg={setOpenCtg}
+            openModal={openModal}
+            setOpenModal={setOpenModal}
+          />
+        )}
+
+        {openModal && (
+          <Login
+            setOpenModal={setOpenModal}
+            setToken={setToken}
+            setUser={setUser}
+          />
+        )}
       </section>
     </nav>
   );

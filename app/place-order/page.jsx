@@ -6,7 +6,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const PlaceOrder = () => {
-  const { cartItems } = useSelector((state) => state.cart); // Assuming cart state is managed by Redux
+  const { cartItems } = useSelector((state) => state.cart);
   const [divisions, setDivisions] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [upazilas, setUpazilas] = useState([]);
@@ -35,7 +35,27 @@ const PlaceOrder = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const isFormValid = () => {
+    const requiredFields = [
+      "fullName",
+      "phone",
+      "division",
+      "district",
+      "upazila",
+      "union",
+      "building",
+      "landmark",
+      "address",
+    ];
+    return requiredFields.every((field) => formData[field]);
+  };
+
   const saveUserAddress = async () => {
+    if (!isFormValid()) {
+      toast.error("Please fill out all required fields before saving.");
+      return;
+    }
+
     const token = localStorage.getItem("token");
     try {
       const res = await axios.put(
@@ -48,10 +68,16 @@ const PlaceOrder = () => {
       }
     } catch (error) {
       console.log(error);
+      toast.error("Failed to save address. Please try again.");
     }
   };
 
   const payWithBkash = async () => {
+    if (!isFormValid()) {
+      toast.error("Please fill out all required fields before proceeding.");
+      return;
+    }
+
     try {
       const res = await axios.post(
         "http://localhost:4000/api/bkash/payment/create",
@@ -64,11 +90,13 @@ const PlaceOrder = () => {
       }
     } catch (error) {
       console.log(error.response.data);
+      toast.error("Payment failed. Please try again.");
     }
   };
 
-  //later i will do it
-  const payWithNagad = async () => {};
+  const payWithNagad = async () => {
+    // Implement Nagad payment logic here
+  };
 
   // Fetch address data
   useEffect(() => {
@@ -107,6 +135,7 @@ const PlaceOrder = () => {
       }));
     }
   }, [formData.division, districts]);
+
   // Filter upazilas based on selected district
   useEffect(() => {
     if (formData.district) {
@@ -129,6 +158,7 @@ const PlaceOrder = () => {
       setFormData((prev) => ({ ...prev, union: "" }));
     }
   }, [formData.upazila, unions]);
+
   return (
     <form className='flex flex-col lg:flex-row gap-8 p-0 sm:p-6 bg-gray-100 h-auto'>
       {/* Delivery Information */}
@@ -208,7 +238,7 @@ const PlaceOrder = () => {
               {filteredDistricts.map((dist) => (
                 <option key={dist.id} value={dist.id}>
                   {dist.name}
-                </option>
+                  </option>
               ))}
             </select>
           </div>
@@ -310,9 +340,11 @@ const PlaceOrder = () => {
           </span>
         </div>
         <button
-          disabled={!formData}
+          disabled={!isFormValid()}
           onClick={payWithBkash}
-          className='w-full mt-4 bg-green-700 text-white py-2 rounded text-sm lg:text-lg cursor-pointer'
+          className={`w-full mt-4 bg-green-700 text-white py-2 rounded text-sm lg:text-lg ${
+            isFormValid() ? "cursor-pointer" : "cursor-not-allowed opacity-50"
+          }`}
         >
           Pay with Bkash
         </button>
