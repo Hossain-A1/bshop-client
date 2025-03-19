@@ -1,4 +1,5 @@
 "use client";
+import { slugify } from "@/utils";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { LiaCartPlusSolid } from "react-icons/lia";
@@ -6,13 +7,7 @@ import { LiaCartPlusSolid } from "react-icons/lia";
 const CategoryProduct = ({ product }) => {
   const navigate = useRouter();
 
-  const slugify = (text) => {
-    if (!text) return "";
-    return text
-      .toLowerCase()
-      .replace(/[\s&']+/g, "-") // Convert spaces, "&", and apostrophes to "-"
-      .replace(/[^a-z0-9-]/g, ""); // Remove special characters
-  };
+
 
   return (
     <>

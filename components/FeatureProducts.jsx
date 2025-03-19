@@ -1,4 +1,5 @@
 "use client";
+import { slugify } from "@/utils";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
@@ -16,14 +17,7 @@ const navigate = useRouter()
     return false;
   });
 
-    // ✅ Slugify function
-    const slugify = (text) => {
-      if (!text) return "";
-      return text
-        .toLowerCase()
-        .replace(/[\s&']+/g, "-") // Convert spaces, "&", and apostrophes to "-"
-        .replace(/[^a-z0-9-]/g, ""); // Remove special characters
-    };
+ 
 
   return (
     <div className="w-full md:pl-4 grid lg:grid-cols-4 xl:grid-cols-5 mt-2 grid-cols-3 gap-2.5 lg:gap-4">

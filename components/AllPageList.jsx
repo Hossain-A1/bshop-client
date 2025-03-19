@@ -1,14 +1,6 @@
 "use client";
+import { slugify } from "@/utils";
 import Link from "next/link";
-
-// ✅ Slugify function
-const slugify = (text) => {
-  if (!text) return "";
-  return text
-    .toLowerCase()
-    .replace(/[\s&']+/g, "-") // Convert spaces, "&", and apostrophes to "-"
-    .replace(/[^a-z0-9-]/g, ""); // Remove special characters
-};
 
 const AllPageList = () => {
   const listOfPage = [

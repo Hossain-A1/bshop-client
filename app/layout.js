@@ -4,11 +4,18 @@ import AllPageList from "@/components/AllPageList";
 import Footer from "@/components/Footer";
 import { ReduxProvider } from "@/provider/ReduxProvider";
 import { Toaster } from "react-hot-toast";
+import { Roboto } from "next/font/google"; 
 
+// Configure the Poppins font
+const poppins = Roboto({
+  subsets: ["latin"], // Specify the subset(s) you want to load
+  weight: ["100","300","400", "500", "700","900"], // Specify the font weights you need
+  variable: "--font-poppins", // Define a CSS variable for the font
+});
 export default function RootLayout({ children }) {
   return (
     <html lang='en'>
-      <body>
+      <body className={`${poppins.variable} font-sans`}>
         <main className='px-2.5 sm:px-8 md:px-10 lg:px-12 min-h-screen bg-bg_color'>
           {/* Navbar */}
           <Toaster/>

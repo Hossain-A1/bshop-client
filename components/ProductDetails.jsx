@@ -42,7 +42,7 @@ const ProductDetails = ({ slug }) => {
   }, [slug, dispatch]);
 
   useEffect(() => {
-    if (images?.length > 0 && images[0]) {
+    if (images?.length > 0) {
       setViewPicture(images[0]); // Set the first image as the default view
     } else {
       setViewPicture(null); // Set to null if no images are available
@@ -137,7 +137,7 @@ const ProductDetails = ({ slug }) => {
                 <div className="zoom-container w-full">
                   {viewPicture && (
                     <figure
-                      className={`lg:h-[90vh] h-80 w-full ${
+                      className={`lg:h-[80vh] h-80 w-full ${
                         isZoomed ? "zoomed" : ""
                       }`}
                       onClick={handleZoomToggle}
@@ -147,10 +147,10 @@ const ProductDetails = ({ slug }) => {
                       onMouseLeave={() => setDragging(false)}
                     >
                       <Image
+                        className="h-full w-full object-fill image-move"
                         height={700}
                         width={1080}
                         alt={title || "Product Image"}
-                        className="h-full w-full object-fill image-move"
                         src={viewPicture}
                         priority
                         style={{
@@ -232,3 +232,4 @@ const ProductDetails = ({ slug }) => {
 };
 
 export default ProductDetails;
+

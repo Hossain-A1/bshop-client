@@ -1,17 +1,11 @@
 "use client";
+import { slugify } from "@/utils";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 const ProductList = ({ activeCategory, setOpenCtg, products }) => {
   const navigate = useRouter();
-  // ✅ Slugify function
-  const slugify = (text) => {
-    if (!text) return "";
-    return text
-      .toLowerCase()
-      .replace(/[\s&']+/g, "-") // Convert spaces, "&", and apostrophes to "-"
-      .replace(/[^a-z0-9-]/g, ""); // Remove special characters
-  };
+ 
   // Filter products based on the active category
   const filteredProducts = products.filter(
     (product) => product.category.toLowerCase() === activeCategory.toLowerCase()
@@ -38,7 +32,7 @@ const ProductList = ({ activeCategory, setOpenCtg, products }) => {
             priority
             className='sm:w-20 sm:h-20 w-14 h-14 object-cover rounded-full group-hover:scale-105 transition-all duration-300'
           />
-          <p className='mt-2 text-xs md:text-sm text-center text-gray-700 font-medium'>
+          <p className='mt-2 text-xs md:text-sm text-center text-black text-opacity-90 font-[400]'>
             {product.title.slice(0, 10)}
           </p>
         </div>

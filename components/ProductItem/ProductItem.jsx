@@ -5,17 +5,13 @@ import { LiaCartPlusSolid } from "react-icons/lia";
 import { useSelector } from "react-redux";
 import Loading from "../ui/Loading";
 import Error from "../ui/Error";
+import { slugify } from "@/utils";
 
 const ProductItem = () => {
   const navigate = useRouter();
   const { products, loading, error } = useSelector((state) => state.product);
 
-  const slugify = (text) => {
-    return text
-      .toLowerCase()
-      .replace(/[\s&]+/g, "-")
-      .replace(/[^a-z0-9-]/g, "");
-  };
+
 
   return (
     <div>

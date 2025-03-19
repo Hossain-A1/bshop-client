@@ -5,12 +5,15 @@ import {
   MdOutlineKeyboardArrowLeft,
 } from "react-icons/md";
 import FeatureProducts from "./FeatureProducts";
-import { ctgText } from "@/data/CategoriesData";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { slugify } from "@/utils";
 
 const Features = () => {
+  const { products } = useSelector((state) => state.product);
   const [activeCategory, setActiveCategory] = useState("All");
   const scrollContainer = useRef(null); // Ref to the scrollable container
-
+  const navigate = useRouter();
   // Scroll Left
   const handleScrollLeft = () => {
     if (scrollContainer.current) {
@@ -52,17 +55,20 @@ const Features = () => {
           ref={scrollContainer}
           className='flex items-center gap-4 overflow-x-scroll hidden-scroll px-10'
         >
-          {ctgText.map((item,i) => (
-              <p
+          {products &&
+            products.map((item, i) => (
+              <span
+                onClick={() =>
+                  navigate.push(`/category/${slugify(item.category)}`)
+                }
                 key={i}
                 className={`cursor-pointer lg:px-8 px-4 font-medium lg:text-sm text-xs whitespace-nowrap lg:py-4 
                  py-2 rounded-full shadow-sm border hover:shadow-md ${
                    activeCategory === item.category ? "bg-gray-300" : ""
                  }`}
-                onClick={() => setActiveCategory(item.category)}
               >
                 {item.category}
-              </p>
+              </span>
             ))}
         </div>
 
