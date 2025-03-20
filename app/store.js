@@ -3,10 +3,12 @@ import productReducer, {
   fetchAllProducts,
 } from "../features/product/productSlice";
 import cartReducer from '../features/cart/cartSlice'
+import authReducer from "@/features/auth/authSlice";
 const store = configureStore({
   reducer: {
     product: productReducer,
     cart:cartReducer,
+    auth:authReducer
   },
 });
 

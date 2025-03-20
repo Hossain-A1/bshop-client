@@ -2,8 +2,7 @@ import { getSingleProduct } from "@/libs";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const serverURL = "http://localhost:4000";
-
+const serverURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 // Fetch all products
 export const fetchAllProducts = createAsyncThunk(
   "product/fetchAll",

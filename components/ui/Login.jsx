@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MdClose } from "react-icons/md";
 import { z } from "zod";
+import { login } from "@/features/auth/authSlice";
+import { useDispatch } from "react-redux";
 
 const Login = ({ setOpenModal, setToken, setUser }) => {
   useEffect(() => {
@@ -11,7 +13,7 @@ const Login = ({ setOpenModal, setToken, setUser }) => {
       document.body.classList.remove("no-scroll");
     };
   }, []);
-
+  const dispatch = useDispatch();
   const backendUrl = "http://localhost:4000";
   const [state, setState] = useState("Login");
   const [error, setError] = useState(null);
@@ -56,7 +58,7 @@ const Login = ({ setOpenModal, setToken, setUser }) => {
       const res = await axios.post(newUrl, validatedData);
 
       if (res.data.success) {
-        setToken(res.data.payload);
+        dispatch(login(res.data.payload));
         localStorage.setItem("token", res.data.payload);
         setOpenModal(false);
       }

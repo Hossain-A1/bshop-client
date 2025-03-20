@@ -24,9 +24,9 @@ import { handleGetUser } from "@/libs";
 
 const Navbar = () => {
   const { cartItems } = useSelector((state) => state.cart);
+  const { token } = useSelector((state) => state.auth);
   const [openCtg, setOpenCtg] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [token, setToken] = useState("");
   const [user, setUser] = useState(null);
   const router = useRouter();
 
@@ -51,9 +51,6 @@ const Navbar = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const token = localStorage.getItem("token");
-        setToken(token);
-
         if (token) {
           const user = await handleGetUser(token);
           setUser(user?.email);

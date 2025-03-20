@@ -32,11 +32,13 @@ const ProductUI = ({
   };
 
   const handleAddToCart = () => {
+
+    
     if (!selectedColor || (sizes.length > 0 && !selectedSize)) {
-      setError("Please select both color and size.");
+      setError(`Please select color ${sizes.length > 0 ?"and size" : ""}.`);
       return;
     }
-  
+
     const cartData = {
       _id: product._id,
       title: product.title,
@@ -46,10 +48,10 @@ const ProductUI = ({
       selectedSize,
       quantity,
     };
-  
+
     // ✅ Get existing cart from localStorage
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    
+
     // ✅ Check if the item already exists
     const existingItemIndex = cart.findIndex(
       (item) =>
@@ -57,20 +59,19 @@ const ProductUI = ({
         item.selectedSize === cartData.selectedSize &&
         item.selectedColor.name === cartData.selectedColor.name
     );
-  
+
     if (existingItemIndex !== -1) {
       cart[existingItemIndex].quantity += quantity; // Increment quantity
     } else {
       cart.push(cartData);
     }
-  
+
     localStorage.setItem("cart", JSON.stringify(cart)); // ✅ Store updated cart
-  
+
     dispatch(addToCart(cartData)); // ✅ Dispatch to Redux
-  
+
     router.push("/cart"); // ✅ Redirect to cart page
   };
-  
 
   return (
     <div>

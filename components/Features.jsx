@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import {
   MdOutlineKeyboardArrowRight,
   MdOutlineKeyboardArrowLeft,
@@ -34,6 +34,18 @@ const Features = () => {
     }
   };
 
+   // Get the first product for each category
+   const filteredProducts = useMemo(() => {
+    const uniqueCategories = {};
+    return products.filter((item) => {
+      if (!uniqueCategories[item.category]) {
+        uniqueCategories[item.category] = true;
+        return true;
+      }
+      return false;
+    });
+  }, [products]);
+
   return (
     <div className='py-10'>
       <h1 className='text-2xl text-center font-bold tracking-widest mb-4'>
@@ -55,8 +67,8 @@ const Features = () => {
           ref={scrollContainer}
           className='flex items-center gap-4 overflow-x-scroll hidden-scroll px-10'
         >
-          {products &&
-            products.map((item, i) => (
+          {filteredProducts &&
+            filteredProducts.map((item, i) => (
               <span
                 onClick={() =>
                   navigate.push(`/category/${slugify(item.category)}`)
