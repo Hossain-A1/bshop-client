@@ -6,7 +6,7 @@ import { z } from "zod";
 import { login } from "@/features/auth/authSlice";
 import { useDispatch } from "react-redux";
 
-const Login = ({ setOpenModal, setToken, setUser }) => {
+const Login = ({ setOpenModal }) => {
   useEffect(() => {
     document.body.classList.add("no-scroll");
     return () => {

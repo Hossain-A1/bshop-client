@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 
 const PlaceOrder = () => {
   const { cartItems } = useSelector((state) => state.cart);
+  const { token, userAddress } = useSelector((state) => state.auth);
   const [divisions, setDivisions] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [upazilas, setUpazilas] = useState([]);
@@ -15,6 +16,9 @@ const PlaceOrder = () => {
   const [filteredDistricts, setFilteredDistricts] = useState([]);
   const [filteredUpazilas, setFilteredUpazilas] = useState([]);
   const [filteredUnions, setFilteredUnions] = useState([]);
+  const [isAddressSaved, setIsAddressSaved] = useState(false);
+
+  // Initialize formData with default values
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -26,6 +30,36 @@ const PlaceOrder = () => {
     landmark: "",
     address: "",
   });
+
+  // Update formData when userAddress is available
+  useEffect(() => {
+    if (userAddress?.address) {
+      const {
+        fullName = "",
+        phone = "",
+        division = "",
+        district = "",
+        upazila = "",
+        union = "",
+        building = "",
+        landmark = "",
+        address = "",
+      } = userAddress.address;
+
+      setFormData({
+        fullName,
+        phone,
+        division,
+        district,
+        upazila,
+        union,
+        building,
+        landmark,
+        address,
+      });
+    }
+  }, [userAddress]); // Run this effect when userAddress changes
+
   const serverURL = "http://localhost:4000";
   const deliveryCharge =
     cartItems.length === 1 ? 100 : 100 + (cartItems.length - 1) * 30;
@@ -50,13 +84,17 @@ const PlaceOrder = () => {
     return requiredFields.every((field) => formData[field]);
   };
 
-  const saveUserAddress = async () => {
+  const saveUserAddress = async (e) => {
+    e.preventDefault();
     if (!isFormValid()) {
       toast.error("Please fill out all required fields before saving.");
+      setIsAddressSaved(false);
       return;
     }
+    if (isFormValid()) {
+      setIsAddressSaved(true);
+    }
 
-    const token = localStorage.getItem("token");
     try {
       const res = await axios.put(
         serverURL + "/api/auth/save/address",
@@ -80,7 +118,7 @@ const PlaceOrder = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/bkash/payment/create",
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bkash/payment/create`,
         { amount: getTotalAmount(cartItems) + deliveryCharge, orderId: 1 },
         { withCredentials: true }
       );
@@ -92,10 +130,6 @@ const PlaceOrder = () => {
       console.log(error.response.data);
       toast.error("Payment failed. Please try again.");
     }
-  };
-
-  const payWithNagad = async () => {
-    // Implement Nagad payment logic here
   };
 
   // Fetch address data
@@ -160,9 +194,12 @@ const PlaceOrder = () => {
   }, [formData.upazila, unions]);
 
   return (
-    <form className='flex flex-col lg:flex-row gap-8 p-0 sm:p-6 bg-gray-100 h-auto'>
+    <div className='flex flex-col lg:flex-row gap-8 p-0 sm:p-6 bg-gray-100 h-auto'>
       {/* Delivery Information */}
-      <div className='bg-white p-2 sm:p-6 rounded-lg shadow-md w-full lg:w-2/3'>
+      <form
+        onSubmit={saveUserAddress}
+        className='bg-white p-2 sm:p-6 rounded-lg shadow-md w-full lg:w-2/3'
+      >
         <h2 className='text-lg font-semibold mb-4'>Delivery Information</h2>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
           {[
@@ -197,7 +234,7 @@ const PlaceOrder = () => {
                 name={name}
                 type={type}
                 required
-                value={formData[name]}
+                value={formData[name]} // Bind value to formData
                 onChange={onChangeHandler}
                 className='w-full border px-3 py-2 rounded text-sm cursor-text'
                 placeholder={placeholder}
@@ -208,7 +245,7 @@ const PlaceOrder = () => {
             <p className='text-sm font-medium mb-1'>Division</p>
             <select
               name='division'
-              value={formData.division}
+              value={formData.division} // Bind value to formData
               required='Division is required!'
               onChange={onChangeHandler}
               className='w-full border px-3 py-2 rounded text-sm cursor-pointer'
@@ -227,7 +264,7 @@ const PlaceOrder = () => {
             <select
               name='district'
               required='Districts is required!'
-              value={formData.district}
+              value={formData.district} // Bind value to formData
               onChange={onChangeHandler}
               className={`w-full border px-3 py-2 rounded text-sm ${
                 !formData.division ? "cursor-not-allowed" : "cursor-pointer"
@@ -238,7 +275,7 @@ const PlaceOrder = () => {
               {filteredDistricts.map((dist) => (
                 <option key={dist.id} value={dist.id}>
                   {dist.name}
-                  </option>
+                </option>
               ))}
             </select>
           </div>
@@ -246,7 +283,7 @@ const PlaceOrder = () => {
             <p className='text-sm font-medium mb-1'>Upazila</p>
             <select
               name='upazila'
-              value={formData.upazila}
+              value={formData.upazila} // Bind value to formData
               required='Upazila is required!'
               onChange={onChangeHandler}
               className={`w-full border px-3 py-2 rounded text-sm ${
@@ -266,7 +303,7 @@ const PlaceOrder = () => {
             <p className='text-sm font-medium mb-1'>Union</p>
             <select
               name='union'
-              value={formData.union}
+              value={formData.union} // Bind value to formData
               required='Union is required!'
               onChange={onChangeHandler}
               className={`w-full border px-3 py-2 rounded text-sm ${
@@ -287,7 +324,8 @@ const PlaceOrder = () => {
             <input
               name='address'
               type='text'
-              value={formData.address}
+              required
+              value={formData.address} // Bind value to formData
               onChange={onChangeHandler}
               className='w-full border px-3 py-2 rounded text-sm'
               placeholder='For Example: House# 123, Street# 123, ABC Road'
@@ -313,12 +351,12 @@ const PlaceOrder = () => {
           ))}
         </div>
         <button
-          onClick={saveUserAddress}
+          type='submit'
           className='w-full mt-4 bg-blue-500 text-white py-2 rounded text-sm'
         >
           SAVE
         </button>
-      </div>
+      </form>
 
       {/* Order Summary */}
       <div className='bg-white p-6 rounded-lg shadow-md w-full lg:w-1/3'>
@@ -340,22 +378,16 @@ const PlaceOrder = () => {
           </span>
         </div>
         <button
-          disabled={!isFormValid()}
+          disabled={!isAddressSaved} // Disable if form is invalid or address is not saved
           onClick={payWithBkash}
           className={`w-full mt-4 bg-green-700 text-white py-2 rounded text-sm lg:text-lg ${
-            isFormValid() ? "cursor-pointer" : "cursor-not-allowed opacity-50"
+            !isAddressSaved ? "cursor-not-allowed opacity-50" : "cursor-pointer"
           }`}
         >
           Pay with Bkash
         </button>
-        <button
-          onClick={payWithNagad}
-          className='w-full mt-4 bg-green-700 text-white py-2 rounded text-sm lg:text-lg cursor-pointer'
-        >
-          Pay with Nagod
-        </button>
       </div>
-    </form>
+    </div>
   );
 };
 

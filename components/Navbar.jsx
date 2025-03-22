@@ -16,19 +16,19 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Overlay from "./Overlay";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Login from "./ui/Login";
 import CategoriesModal from "./CategoriesModal";
 import LoginOverlay from "./LoginOverlay";
-import { handleGetUser } from "@/libs";
+import { fetchSingleUser } from "@/features/auth/authSlice";
 
 const Navbar = () => {
   const { cartItems } = useSelector((state) => state.cart);
-  const { token } = useSelector((state) => state.auth);
+  const { token,userAddress } = useSelector((state) => state.auth);
   const [openCtg, setOpenCtg] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [user, setUser] = useState(null);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const pcNavList = [
     { label: "Leather items", href: "/leather-items" },
@@ -49,29 +49,20 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        if (token) {
-          const user = await handleGetUser(token);
-          setUser(user?.email);
-        }
-      } catch (error) {
-        console.error("Error fetching user:", error);
-      }
-    };
-
-    fetchUser();
+    if (token) {
+      dispatch(fetchSingleUser(token));
+    }
   }, [token]);
 
   return (
     <nav>
-      <div className='flex items-center justify-between border-b py-3 sm:gap-3 gap-2'>
+      <div className='flex items-center justify-between border-b py-3 sm:gap-3 gap-1'>
         <Link
           onClick={() => setOpenCtg(false)}
           href='/'
           className='sm:text-3xl text-lg font-semibold uppercase'
         >
-          B.Shop
+          E/U
         </Link>
 
         <div className='sm:max-w-4xl 2xl:w-full lg:flex items-center gap-3 2xl:gap-10'>
@@ -122,10 +113,12 @@ const Navbar = () => {
             )}
           </span>
 
-          {token ? (
+          {userAddress ? (
             <span className='flex flex-col items-center cursor-pointer relative group'>
-              <p className='hidden lg:block text-sm text-org'>{user}</p>
-              <p className='text-sm font-medium hover:text-green-800 duration-300'>
+              <p className='hidden lg:block text-sm text-org'>
+                {userAddress?.email}
+              </p>
+              <p className='text-xs sm:text-sm font-medium hover:text-green-800 duration-300'>
                 Orders & Account
               </p>
 
@@ -170,7 +163,7 @@ const Navbar = () => {
           )}
 
           <div onClick={handleNavigate} className='relative'>
-            <p className='absolute -top-4 right-4 font-bold text-red-600 sm:text-sm text-xs bg-gray-200 py-0.5 px-1 rounded-full'>
+            <p className='absolute w-4 h-4 flex justify-center items-center text-center -top-3 right-3 font-medium text-red-600 sm:text-sm text-xs bg-gray-200   rounded-full'>
               {cartItems.length}
             </p>
             <BiCart className='text-xl' />
@@ -183,11 +176,7 @@ const Navbar = () => {
         {openModal && (
           <>
             <LoginOverlay setOpenModal={setOpenModal} />
-            <Login
-              setOpenModal={setOpenModal}
-              setToken={setToken}
-              setUser={setUser}
-            />
+            <Login setOpenModal={setOpenModal} />
           </>
         )}
       </section>

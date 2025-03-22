@@ -9,9 +9,11 @@ const CancelPage = () => {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-center">
       <Image 
         src="/assets/bkash.png" 
+        priority
         alt="Bkash Logo" 
         width={150} 
         height={150} 
+        className="h-full w-full overflow-hidden"
       />
       <h1 className="text-2xl font-semibold text-gray-800 mt-4">Payment Canceled</h1>
       <p className="text-gray-600 mt-2">Your payment was not completed. Please try again.</p>

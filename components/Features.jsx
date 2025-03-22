@@ -74,7 +74,7 @@ const Features = () => {
                   navigate.push(`/category/${slugify(item.category)}`)
                 }
                 key={i}
-                className={`cursor-pointer lg:px-8 px-4 font-medium lg:text-sm text-xs whitespace-nowrap lg:py-4 
+                className={`mb-3 cursor-pointer lg:px-8 px-4 font-medium lg:text-sm text-xs whitespace-nowrap lg:py-4 
                  py-2 rounded-full shadow-sm border hover:shadow-md ${
                    activeCategory === item.category ? "bg-gray-300" : ""
                  }`}
@@ -94,7 +94,7 @@ const Features = () => {
       </div>
 
       {/* Active Category Content */}
-      <div className='mt-6'>
+      <div className= 'mt-3 md:mt-6'>
         <FeatureProducts />
       </div>
     </div>
