@@ -6,11 +6,23 @@ const serverURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 // Fetch all products
 export const fetchAllProducts = createAsyncThunk(
   "product/fetchAll",
-  async ({ endpoint = "/list", load = 1, limit = 10 }, { rejectWithValue }) => {
+  async (
+    { endpoint = "/list", search = "", load = 1, limit = 10 },
+    { rejectWithValue }
+  ) => {
     try {
-      const res = await axios.get(
-        `${serverURL}/api/product${endpoint}?load=${load}&limit=${limit}`
-      );
+      const params = {
+        load,
+        limit,
+      };
+
+      if (search) {
+        params.search = search;
+      }
+
+      const res = await axios.get(`${serverURL}/api/product${endpoint}`, {
+        params,
+      });
 
       if (res.data.statusCode === 200) {
         return res.data.payload;
@@ -40,6 +52,7 @@ export const fetchSingleProduct = createAsyncThunk(
 const initialState = {
   products: [],
   product: {},
+  searchQuery: "",
   loading: false,
   error: null,
   pagination: {
@@ -53,18 +66,14 @@ export const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    resetProducts: (state) => {
-      state.products = [];
-      state.pagination.currentLoad = 1;
-    },
-    resetProductDetails: (state) => {
-      state.product = null;
-    },
-
     seeMoreProducts: (state) => {
       if (state.pagination.currentLoad < state.pagination.totalLoad) {
         state.pagination.currentLoad += 1;
       }
+    },
+    setSearchQuery: (state, action) => {
+      state.searchQuery = action.payload;
+      state.products = [];
     },
   },
   extraReducers: (builder) => {
@@ -75,7 +84,13 @@ export const productSlice = createSlice({
       })
       .addCase(fetchAllProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = [...state.products, ...action.payload.products];
+        // Merge products without duplicates
+        const existingIds = new Set(state.products.map((p) => p._id));
+        const newProducts = action.payload.products.filter(
+          (product) => !existingIds.has(product._id)
+        );
+
+        state.products = [...state.products, ...newProducts];
         state.pagination = {
           totalLoad: action.payload.totalLoad,
           currentLoad: action.payload.currentLoad,
@@ -103,6 +118,5 @@ export const productSlice = createSlice({
 });
 
 // Export Actions & Reducer
-export const { resetProducts, resetProductDetails, seeMoreProducts } =
-  productSlice.actions;
+export const { seeMoreProducts, setSearchQuery } = productSlice.actions;
 export default productSlice.reducer;

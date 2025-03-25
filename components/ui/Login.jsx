@@ -32,6 +32,14 @@ const Login = ({ setOpenModal }) => {
       .email("Please enter a valid email address"),
     password: z.string().min(1, "Password is required"),
   });
+  const registerSchema = z.object({
+    name: z.string().min(1, "Name is required"),
+    email: z
+      .string()
+      .min(1, "Email is required")
+      .email("Please enter a valid email address"),
+    password: z.string().min(1, "Password is required"),
+  });
 
   const handleGetStarted = async (e) => {
     e.preventDefault();
@@ -45,13 +53,15 @@ const Login = ({ setOpenModal }) => {
 
     try {
       // Validate the form data using the schema
-      const validatedData = loginSchema.parse(data);
+      let validatedData;
 
       // If validation passes, make the API call
       let newUrl = backendUrl;
       if (state === "Login") {
+        validatedData = loginSchema.parse(data);
         newUrl += "/api/auth/login";
       } else {
+        validatedData = registerSchema.parse(data);
         newUrl += "/api/auth/register";
       }
 

@@ -15,20 +15,26 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Overlay from "./Overlay";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import Login from "./ui/Login";
 import CategoriesModal from "./CategoriesModal";
 import LoginOverlay from "./LoginOverlay";
-import { fetchSingleUser } from "@/features/auth/authSlice";
+import { fetchSingleUser, logout } from "@/features/auth/authSlice";
+import {
+  fetchAllProducts,
+  setSearchQuery,
+} from "@/features/product/productSlice";
 
 const Navbar = () => {
   const { cartItems } = useSelector((state) => state.cart);
-  const { token,userAddress } = useSelector((state) => state.auth);
+  const { token, userAddress } = useSelector((state) => state.auth);
   const [openCtg, setOpenCtg] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
+
+  const path = usePathname();
 
   const pcNavList = [
     { label: "Leather items", href: "/leather-items" },
@@ -43,6 +49,31 @@ const Navbar = () => {
       router.push("/cart");
     }
   };
+
+  let { searchQuery } = useSelector((state) => state.product);
+
+  const handleSearch = (event) => {
+    let query = event.target.value;
+    dispatch(setSearchQuery(query));
+
+    router.push("/products");
+
+    dispatch(fetchAllProducts({ search: query }));
+
+    if(path !=="/products"){
+query=""
+    }
+  };
+
+  useEffect(() => {
+    // Clear search query when leaving /products page
+if(searchQuery!==""){
+  if (path !== "/products") {
+    dispatch(setSearchQuery(""));
+    dispatch(fetchAllProducts({ search: "" })); 
+  }
+}
+  }, [path,searchQuery]);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -97,6 +128,7 @@ const Navbar = () => {
           <span className='w-full 2xl:w-[60rem] flex items-center gap-1 sm:p-2 p-1 border-2 focus:border-black rounded-full'>
             <CiSearch className='text-gray-500 font-semibold text-lg' />
             <input
+              onChange={handleSearch}
               className='outline-none border-none sm:text-sm text-xs w-full'
               type='search'
               placeholder='Search here'
@@ -149,7 +181,10 @@ const Navbar = () => {
                     <FaUndo className='text-gray-600' />
                     My Returns & Cancellations
                   </li>
-                  <li className='px-4 py-2 hover:bg-gray-100 flex items-center gap-2'>
+                  <li
+                    onClick={() => dispatch(logout())}
+                    className='px-4 py-2 hover:bg-gray-100 flex items-center gap-2'
+                  >
                     <FaSignOutAlt className='text-gray-600' />
                     Logout
                   </li>

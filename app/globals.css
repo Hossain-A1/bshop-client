@@ -9,9 +9,6 @@ body {
   width: 8px; /* Set width for the scrollbar */
 }
 
-.hidden-scroll::-webkit-scrollbar{
-  display: none;
-}
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #DEDEDE; /* Color of the scrollbar */
   border-radius: 4px; /* Roundness of the scrollbar thumb */
@@ -24,7 +21,9 @@ body {
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent; /* Background of the track */
 }
-
+.hidden-scroll::-webkit-scrollbar{
+  display: none;
+}
 /* Prevent scrolling when no-scroll class is active */
 .no-scroll {
   overflow: hidden;
