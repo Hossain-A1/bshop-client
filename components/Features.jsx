@@ -47,8 +47,8 @@ const Features = () => {
   }, [products]);
 
   return (
-    <div className='py-10'>
-      <h1 className='text-2xl text-center font-bold tracking-widest mb-4'>
+    <div className='py-5 lg:py-10'>
+      <h1 className='text-xl md:text-2xl text-center font-semibold tracking-widest mb-4'>
         EXPLORE YOUR INTERESTS
       </h1>
 

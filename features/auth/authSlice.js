@@ -1,6 +1,6 @@
 import { handleGetUser } from "@/libs";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-const user = localStorage.getItem("token")
+const secret = localStorage.getItem("token")
   ? localStorage.getItem("token")
   : null;
 
@@ -17,7 +17,7 @@ export const fetchSingleUser = createAsyncThunk(
 );
 
 const initialState = {
-  token: user,
+  token: secret,
   userAddress: null,
   loading: false,
   error: null,

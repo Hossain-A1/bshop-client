@@ -2,7 +2,7 @@
 import { FaListUl } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa6";
 import { BiCart } from "react-icons/bi";
-import { CiSearch } from "react-icons/ci";
+import { BsSearch } from "react-icons/bs";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import {
   FaUser,
@@ -29,8 +29,10 @@ import {
 const Navbar = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const { token, userAddress } = useSelector((state) => state.auth);
+  const { searchQuery } = useSelector((state) => state.product);
   const [openCtg, setOpenCtg] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -47,33 +49,28 @@ const Navbar = () => {
       setOpenModal(true);
     } else {
       router.push("/cart");
+      setOpenCtg(false);
     }
   };
 
-  let { searchQuery } = useSelector((state) => state.product);
-
-  const handleSearch = (event) => {
-    let query = event.target.value;
-    dispatch(setSearchQuery(query));
-
-    router.push("/products");
-
-    dispatch(fetchAllProducts({ search: query }));
-
-    if(path !=="/products"){
-query=""
+  const handleSearch = () => {
+    if (searchValue.trim()) {
+      dispatch(fetchAllProducts({ search: searchValue }));
+      dispatch(setSearchQuery(searchValue));
+        router.push("/products");
+    }
+    if(openCtg){
+      setOpenCtg(false)
     }
   };
 
   useEffect(() => {
     // Clear search query when leaving /products page
-if(searchQuery!==""){
-  if (path !== "/products") {
-    dispatch(setSearchQuery(""));
-    dispatch(fetchAllProducts({ search: "" })); 
-  }
-}
-  }, [path,searchQuery]);
+    if (path !== "/products") {
+      setSearchValue("");
+      dispatch(fetchAllProducts({ search: "" }));
+    }
+  }, [path]);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -124,14 +121,20 @@ if(searchQuery!==""){
           </div>
         </div>
 
-        <div className='flex justify-between items-center sm:gap-5 gap-3 w-full'>
-          <span className='w-full 2xl:w-[60rem] flex items-center gap-1 sm:p-2 p-1 border-2 focus:border-black rounded-full'>
-            <CiSearch className='text-gray-500 font-semibold text-lg' />
+        <div className='flex justify-between items-center sm:gap-5 gap-1.5 w-full'>
+          <span
+           
+            className='relative h-full w-full 2xl:w-[60rem] flex items-center gap-1 sm:p-2.5 p-1 border-2  rounded-full focus-within:border-org/70'
+          >
+            <p  onClick={handleSearch} className='absolute flex justify-center items-center cursor-pointer border-none  rounded-r-full p-1 md:p-2 h-full bg-org/50 hover:bg-org/70 transition-all  right-0'>
+              <BsSearch className='font-bold  text-sm sm:text-xl text-gray-700' />
+            </p>
             <input
-              onChange={handleSearch}
-              className='outline-none border-none sm:text-sm text-xs w-full'
+              onChange={(e) => setSearchValue(e.target.value)}
+              value={searchValue}
+              className='outline-none border-none sm:text-sm text-xs w-full mr-4 md:mr-7 '
               type='search'
-              placeholder='Search here'
+              placeholder='Search here..'
             />
           </span>
 
@@ -161,7 +164,10 @@ if(searchQuery!==""){
                 <div className='absolute -top-2 right-1/2 translate-x-1/2 w-4 h-4 bg-white transform rotate-45 border-t border-l border-gray-200'></div>
 
                 <ul className='py-2'>
-                  <li className='px-4 py-2 hover:bg-gray-100 flex items-center gap-2'>
+                  <li
+                    onClick={() => router.push("/profile")}
+                    className='px-4 py-2 hover:bg-gray-100 flex items-center gap-2'
+                  >
                     <FaUser className='text-gray-600' />
                     Manage My Account
                   </li>

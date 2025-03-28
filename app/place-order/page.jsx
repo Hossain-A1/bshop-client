@@ -61,7 +61,7 @@ const PlaceOrder = () => {
     }
   }, [userAddress]); // Run this effect when userAddress changes
 
-  console.log(formData);
+  console.log(userAddress);
   const serverURL = "http://localhost:4000";
   const deliveryCharge =
     cartItems.length === 1 ? 100 : 100 + (cartItems.length - 1) * 30;
