@@ -4,7 +4,6 @@ import {
   MdOutlineKeyboardArrowRight,
   MdOutlineKeyboardArrowLeft,
 } from "react-icons/md";
-import FeatureProducts from "./FeatureProducts";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { slugify } from "@/utils";
@@ -94,9 +93,7 @@ const Features = () => {
       </div>
 
       {/* Active Category Content */}
-      <div className= 'mt-3 md:mt-6'>
-        <FeatureProducts />
-      </div>
+     
     </div>
   );
 };

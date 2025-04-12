@@ -51,6 +51,7 @@ export const fetchSingleProduct = createAsyncThunk(
 // Initial State
 const initialState = {
   products: [],
+  searchResults: [],
   product: {},
   searchQuery: "",
   loading: false,
@@ -73,7 +74,7 @@ export const productSlice = createSlice({
     },
     setSearchQuery: (state, action) => {
       state.searchQuery = action.payload;
-      state.products = [];
+      state.searchResults = [];
     },
   },
   extraReducers: (builder) => {
@@ -90,7 +91,13 @@ export const productSlice = createSlice({
           (product) => !existingIds.has(product._id)
         );
 
-        state.products = [...state.products, ...newProducts];
+        if (state.searchQuery) {
+          // Store searched products separately
+          state.searchResults = action.payload.products;
+        } else {
+          // Keep original products array
+          state.products = [...state.products, ...newProducts];
+        }
         state.pagination = {
           totalLoad: action.payload.totalLoad,
           currentLoad: action.payload.currentLoad,

@@ -1,14 +1,20 @@
+"use client"
+import FeatureProducts from '@/components/FeatureProducts';
 import Features from '@/components/Features';
 import ProductItem from '@/components/ProductItem/ProductItem';
-import React from 'react'
+import { useSelector } from 'react-redux';
 
 const page = () => {
+  const { products, searchResults,loading,error } = useSelector((state) => state.product);
+
   return (
     <div>
       <Features/>
-      <ProductItem/>
+      <div className= 'mt-3 md:mt-6'>
+        <FeatureProducts />
+      </div>
+      <ProductItem products={products} loading={loading} error={error} />
 
-      <p className='text-xl'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci, enim exercitationem? Praesentium laboriosam illum sunt, odit, repellendus facilis quis doloribus recusandae ad repellat amet quibusdam. Magnam cupiditate iusto esse eaque quis a nemo ad doloremque id enim eos, perferendis explicabo velit, animi fugit, dignissimos tenetur necessitatibus facere deleniti in quasi praesentium inventore laudantium dolorem? Cupiditate labore ipsum ullam quasi qui doloribus, molestias consequatur placeat minus ipsam totam molestiae omnis? Omnis, earum? Laborum quae, eaque magnam voluptatem saepe facere quasi amet sint ex est perspiciatis soluta dolorem? Aliquid, quibusdam similique. Ut quis magni officiis provident incidunt numquam accusantium rem sunt, ipsam distinctio. Nam, asperiores. Sunt eligendi nostrum consequuntur! Illum recusandae obcaecati, modi totam accusantium est cumque sequi, repudiandae distinctio, magnam eius beatae quis. Voluptas quidem quod inventore eius non culpa minus, corporis eum, unde odio dolores nemo. Ipsa, libero. Praesentium sit, blanditiis aut maxime ducimus reprehenderit necessitatibus quod quidem libero sapiente laboriosam, itaque officiis quibusdam qui voluptatibus dolor cum fuga quaerat deleniti et. Excepturi ipsum distinctio neque ab aut quo obcaecati, facere enim. Qui temporibus ratione mollitia neque, nostrum sunt sapiente rem asperiores quidem soluta veniam vero consectetur omnis quasi ipsum sint impedit exercitationem nobis molestiae necessitatibus amet officiis itaque fugiat. Eius consequuntur eum, quasi aspernatur soluta exercitationem odio nulla, voluptate sint voluptatibus nostrum impedit molestiae provident molestias quisquam dolorum et quis quo inventore accusantium rerum. Ea id, fugiat corporis pariatur exercitationem temporibus culpa, quis, sint earum ratione quasi eos est alias possimus? Aut fugiat totam pariatur dicta harum, sit velit veniam in incidunt id et, laudantium error officiis reiciendis dolores nisi maiores eum? Quod deserunt fugiat voluptatem sequi iusto laboriosam veritatis, quos blanditiis? Tenetur vero, ducimus nam optio excepturi autem omnis et fuga magni adipisci quam aliquam sequi expedita alias unde odit voluptates asperiores quibusdam at a maxime exercitationem consequuntur consequatur corporis. Possimus temporibus nam voluptatum harum, velit expedita sed. Similique sequi a quo vero ab consectetur, distinctio eaque, libero, excepturi aut aliquid labore alias itaque soluta nobis atque error ipsum id veniam! Adipisci necessitatibus sit at quia nesciunt similique debitis quo molestiae ea laboriosam tempore reprehenderit, dignissimos rem inventore totam blanditiis voluptate magnam repellat, sed quos facere omnis. Est odio aliquam accusantium ipsum ratione dignissimos, excepturi laudantium debitis? Ex saepe ipsum fuga architecto voluptatibus dolorum, non blanditiis! Quisquam aliquam quia eaque placeat eos? Error dicta mollitia debitis nobis eius tenetur, porro commodi natus aperiam veniam consequatur! Quam corporis assumenda doloremque fugiat, unde vitae laudantium quae molestias suscipit? Et nobis assumenda, totam eius sunt aspernatur blanditiis! Eligendi sit exercitationem nemo fuga adipisci vero error soluta blanditiis iusto perspiciatis! Ut modi reiciendis, voluptate, distinctio voluptas nesciunt cum ipsa ea sed vel autem vitae delectus rem ab fugit esse fugiat odit placeat tempore accusantium pariatur possimus? Dolores fugiat illo error, odit repudiandae voluptate optio amet velit eos ut nemo fuga accusamus consequatur ducimus. Repellendus optio nihil dignissimos magnam! Doloremque magnam totam dolores consequuntur soluta iste rerum quae corrupti alias mollitia id eligendi necessitatibus vitae porro eos quis delectus minus reprehenderit, libero consequatur.</p>
     </div>
   )
 }

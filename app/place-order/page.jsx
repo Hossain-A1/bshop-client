@@ -61,7 +61,6 @@ const PlaceOrder = () => {
     }
   }, [userAddress]); // Run this effect when userAddress changes
 
-  console.log(userAddress);
   const serverURL = "http://localhost:4000";
   const deliveryCharge =
     cartItems.length === 1 ? 100 : 100 + (cartItems.length - 1) * 30;
@@ -87,17 +86,16 @@ const PlaceOrder = () => {
   };
 
   const saveUserAddress = async (e) => {
-    e.preventDefault();
-    if (!isFormValid()) {
-      toast.error("Please fill out all required fields before saving.");
-      setIsAddressSaved(false);
-      return;
-    }
-    if (isFormValid()) {
-      setIsAddressSaved(true);
-    }
-
     try {
+      e.preventDefault();
+      if (!isFormValid()) {
+        toast.error("Please fill out all required fields before saving.");
+        setIsAddressSaved(false);
+        return;
+      }
+      if (isFormValid()) {
+        setIsAddressSaved(true);
+      }
       const res = await axios.put(
         serverURL + "/api/auth/save/address",
         { formData },
@@ -122,10 +120,11 @@ const PlaceOrder = () => {
     try {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bkash/payment/create`,
-        { amount: getTotalAmount(cartItems) + deliveryCharge, orderId: 1 },
-        { withCredentials: true }
+        { amount: getTotalAmount(cartItems) + deliveryCharge },
+        { headers: `Bearer ${token}`, withCredentials: true }
       );
       window.location.href = res.data.bkashURL;
+
       if (res.data.statusCode === "0000") {
         localStorage.removeItem("cart");
       }
@@ -158,7 +157,7 @@ const PlaceOrder = () => {
   useEffect(() => {
     if (formData.division) {
       const filtered = districts.filter(
-        (d) => d.division_id ===Number(formData.division)
+        (d) => d.division_id === Number(formData.division)
       );
       setFilteredDistricts(filtered);
       setFilteredUpazilas([]);
@@ -203,7 +202,7 @@ const PlaceOrder = () => {
         className='bg-white p-2 sm:p-6 rounded-lg shadow-md w-full lg:w-2/3'
       >
         <h2 className='text-lg font-semibold mb-4'>Delivery Information</h2>
-        {formData.address !== "" && !editMode ? (
+        {editMode ? (
           <div>
             <div className='flex flex-wrap text-sm text-gray-700'>
               <p>{formData.fullName}</p>,<p>{formData.phone}</p>,

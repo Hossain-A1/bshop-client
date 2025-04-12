@@ -5,6 +5,9 @@ import Footer from "@/components/Footer";
 import { ReduxProvider } from "@/provider/ReduxProvider";
 import { Toaster } from "react-hot-toast";
 import { Roboto } from "next/font/google";
+export const metadata ={
+  title:"B-shop e-commerce"
+}
 
 // Configure the Poppins font
 const poppins = Roboto({

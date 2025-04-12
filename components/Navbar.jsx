@@ -57,10 +57,10 @@ const Navbar = () => {
     if (searchValue.trim()) {
       dispatch(fetchAllProducts({ search: searchValue }));
       dispatch(setSearchQuery(searchValue));
-        router.push("/products");
+      router.push("/products");
     }
-    if(openCtg){
-      setOpenCtg(false)
+    if (openCtg) {
+      setOpenCtg(false);
     }
   };
 
@@ -122,11 +122,11 @@ const Navbar = () => {
         </div>
 
         <div className='flex justify-between items-center sm:gap-5 gap-1.5 w-full'>
-          <span
-           
-            className='relative h-full w-full 2xl:w-[60rem] flex items-center gap-1 sm:p-2.5 p-1 border-2  rounded-full focus-within:border-org/70'
-          >
-            <p  onClick={handleSearch} className='absolute flex justify-center items-center cursor-pointer border-none  rounded-r-full p-1 md:p-2 h-full bg-org/50 hover:bg-org/70 transition-all  right-0'>
+          <span className='relative h-full w-full 2xl:w-[60rem] flex items-center gap-1 sm:p-2.5 p-1 border-2  rounded-full focus-within:border-org/70'>
+            <p
+              onClick={handleSearch}
+              className='absolute flex justify-center items-center cursor-pointer border-none  rounded-r-full p-1 md:p-2 h-full bg-org/50 hover:bg-org/70 transition-all  right-0'
+            >
               <BsSearch className='font-bold  text-sm sm:text-xl text-gray-700' />
             </p>
             <input
