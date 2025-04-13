@@ -2,8 +2,7 @@
 import ProductItem from "@/components/ProductItem/ProductItem";
 import { useSelector } from "react-redux";
 
-const ProductPage = ({ params }) => {
-  console.log(params);
+const ProductPage = () => {
   const { products, searchResults, loading, error } = useSelector(
     (state) => state.product
   );

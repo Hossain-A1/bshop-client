@@ -4,7 +4,7 @@ export const generateMetadata = async ({ params }) => {
   const slug = params?.slug || [];
 
   return {
-    title: `B-shop-${slug[1] || "product"}`,
+    title: `B-shop-product-${slug[1] || "product"}`,
   };
 };
 

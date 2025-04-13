@@ -3,7 +3,7 @@ export const generateMetadata = ({ params }) => {
   const category = params?.category;
   console.log(params);
   return {
-    title: `b-shop / product - ${category}` || "category",
+    title: `b-shop-category - ${category}` || "category",
   };
 };
 const CategoryPage = async ({ params }) => {
