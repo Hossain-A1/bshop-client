@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import cookie from "js-cookie"; // Use js-cookie for client-side cookie handling
 import axios from "axios";
 import { MdClose } from "react-icons/md";
 import { z } from "zod";
@@ -17,7 +18,7 @@ const Login = ({ setOpenModal }) => {
   const backendUrl = "http://localhost:4000";
   const [state, setState] = useState("Login");
   const [error, setError] = useState(null);
-  const [focusedField, setFocusedField] = useState(null); // Track focused input
+  const [focusedField, setFocusedField] = useState(null); 
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -65,17 +66,18 @@ const Login = ({ setOpenModal }) => {
         newUrl += "/api/auth/register";
       }
 
-      const res = await axios.post(newUrl, validatedData);
+      const res = await axios.post(newUrl, validatedData, {
+        withCredentials: true,
+      });
 
       if (res.data.success) {
-        dispatch(login(res.data.payload));
-        localStorage.setItem("token", res.data.payload);
+        const auth = cookie.get("auth");
+        dispatch(login(JSON.parse(auth)));
         setOpenModal(false);
       }
     } catch (err) {
       if (err instanceof z.ZodError) {
-        // Handle Zod validation errors
-        setError(err.errors[0].message); // Display the first error message
+        setError(err.errors[0].message); 
       } else if (err.response) {
         // Handle backend errors
         setError(err.response.data.message);

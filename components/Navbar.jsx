@@ -20,19 +20,19 @@ import { useDispatch, useSelector } from "react-redux";
 import Login from "./ui/Login";
 import CategoriesModal from "./CategoriesModal";
 import LoginOverlay from "./LoginOverlay";
-import { fetchSingleUser, logout } from "@/features/auth/authSlice";
+import { logout } from "@/features/auth/authSlice";
 import {
   fetchAllProducts,
+  resetSearchResults,
   setSearchQuery,
 } from "@/features/product/productSlice";
 
 const Navbar = () => {
   const { cartItems } = useSelector((state) => state.cart);
-  const { token, userAddress } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
   const { searchQuery } = useSelector((state) => state.product);
   const [openCtg, setOpenCtg] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -54,9 +54,8 @@ const Navbar = () => {
   };
 
   const handleSearch = () => {
-    if (searchValue.trim()) {
-      dispatch(fetchAllProducts({ search: searchValue }));
-      dispatch(setSearchQuery(searchValue));
+    if (searchQuery.trim()) {
+      dispatch(fetchAllProducts({ search: searchQuery }));
       router.push("/products");
     }
     if (openCtg) {
@@ -67,20 +66,15 @@ const Navbar = () => {
   useEffect(() => {
     // Clear search query when leaving /products page
     if (path !== "/products") {
-      setSearchValue("");
       dispatch(fetchAllProducts({ search: "" }));
+      dispatch(resetSearchResults());
+      dispatch(setSearchQuery(""));
     }
   }, [path]);
 
   const handleOpenModal = () => {
     setOpenModal(true);
   };
-
-  useEffect(() => {
-    if (token) {
-      dispatch(fetchSingleUser(token));
-    }
-  }, [token]);
 
   return (
     <nav>
@@ -122,21 +116,27 @@ const Navbar = () => {
         </div>
 
         <div className='flex justify-between items-center sm:gap-5 gap-1.5 w-full'>
-          <span className='relative h-full w-full 2xl:w-[60rem] flex items-center gap-1 sm:p-2.5 p-1 border-2  rounded-full focus-within:border-org/70'>
-            <p
-              onClick={handleSearch}
-              className='absolute flex justify-center items-center cursor-pointer border-none  rounded-r-full p-1 md:p-2 h-full bg-org/50 hover:bg-org/70 transition-all  right-0'
-            >
-              <BsSearch className='font-bold  text-sm sm:text-xl text-gray-700' />
-            </p>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSearch();
+            }}
+            className='relative h-full w-full 2xl:w-[60rem] flex items-center gap-1 sm:p-2.5 p-1 border-2 rounded-full focus-within:border-org/70'
+          >
             <input
-              onChange={(e) => setSearchValue(e.target.value)}
-              value={searchValue}
-              className='outline-none border-none sm:text-sm text-xs w-full mr-4 md:mr-7 '
+              value={searchQuery}
+              onChange={(e) => dispatch(setSearchQuery(e.target.value))}
+              className='outline-none border-none sm:text-sm text-xs w-full mr-4 md:mr-7'
               type='search'
               placeholder='Search here..'
             />
-          </span>
+            <button
+              type='submit'
+              className='absolute flex justify-center items-center cursor-pointer border-none rounded-r-full p-1 md:p-2 h-full bg-org/50 hover:bg-org/70 transition-all right-0'
+            >
+              <BsSearch className='font-bold text-sm sm:text-xl text-gray-700' />
+            </button>
+          </form>
 
           <span>
             <FaListUl
@@ -148,11 +148,9 @@ const Navbar = () => {
             )}
           </span>
 
-          {userAddress ? (
+          {token ? (
             <span className='flex flex-col items-center cursor-pointer relative group'>
-              <p className='hidden lg:block text-sm text-org'>
-                {userAddress?.email}
-              </p>
+              <p className='hidden lg:block text-sm text-org'>{token?.email}</p>
               <p className='text-xs sm:text-sm font-medium hover:text-green-800 duration-300'>
                 Orders & Account
               </p>
@@ -203,7 +201,7 @@ const Navbar = () => {
             </span>
           )}
 
-          <div onClick={handleNavigate} className='relative'>
+          <div onClick={handleNavigate} className='relative cursor-pointer'>
             <p className='absolute w-4 h-4 flex justify-center items-center text-center -top-3 right-3 font-medium text-red-600 sm:text-sm text-xs bg-gray-200   rounded-full'>
               {cartItems.length}
             </p>

@@ -73,9 +73,12 @@ export const productSlice = createSlice({
       }
     },
     setSearchQuery: (state, action) => {
-      state.searchQuery = action.payload;
-      state.searchResults = [];
+      state.searchQuery = action.payload.trim();
     },
+
+    resetSearchResults:(state)=>{
+      state.searchResults=[]
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -94,6 +97,7 @@ export const productSlice = createSlice({
         if (state.searchQuery) {
           // Store searched products separately
           state.searchResults = action.payload.products;
+
         } else {
           // Keep original products array
           state.products = [...state.products, ...newProducts];
@@ -125,5 +129,5 @@ export const productSlice = createSlice({
 });
 
 // Export Actions & Reducer
-export const { seeMoreProducts, setSearchQuery } = productSlice.actions;
+export const { seeMoreProducts, setSearchQuery ,resetSearchResults} = productSlice.actions;
 export default productSlice.reducer;

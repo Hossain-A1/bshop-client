@@ -1,8 +1,6 @@
 import { handleGetUser } from "@/libs";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-const secret = localStorage.getItem("token")
-  ? localStorage.getItem("token")
-  : null;
+import cookie from "js-cookie"; // Use js-cookie for client-side cookie handling
 
 // Fetch single user by their token
 export const fetchSingleUser = createAsyncThunk(
@@ -17,7 +15,7 @@ export const fetchSingleUser = createAsyncThunk(
 );
 
 const initialState = {
-  token: secret,
+  token: cookie.get("auth") || null, // Extract auth token from cookie on client
   userAddress: null,
   loading: false,
   error: null,
@@ -31,8 +29,9 @@ export const authSlice = createSlice({
       state.token = action.payload;
     },
     logout: (state) => {
-      state.token = localStorage.removeItem("token");
+      state.token = null;
       state.userAddress = null;
+      cookie.remove("auth"); // Remove token from cookie
     },
   },
   extraReducers: (builder) => {
