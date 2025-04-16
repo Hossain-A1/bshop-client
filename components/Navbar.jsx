@@ -27,7 +27,7 @@ import {
   setSearchQuery,
 } from "@/features/product/productSlice";
 
-const Navbar = () => {
+const Navbar = ({ children }) => {
   const { cartItems } = useSelector((state) => state.cart);
   const { token } = useSelector((state) => state.auth);
   const { searchQuery } = useSelector((state) => state.product);
@@ -37,6 +37,12 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   const path = usePathname();
+
+  const blockList = ["/admin", "/admin/orders", "/admin/add","/admin/dashboard"];
+
+  const match = blockList.includes(path);
+
+  if (match) return <div>{children}</div>;
 
   const pcNavList = [
     { label: "Leather items", href: "/leather-items" },

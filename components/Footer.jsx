@@ -1,6 +1,14 @@
-import React from "react";
+'use client'
+import { usePathname } from "next/navigation";
 
-const Footer = () => {
+const Footer = ({children}) => {
+  const path = usePathname();
+  
+    const blockList = ["/admin", "/admin/orders", "/admin/add","/admin/dashboard"];
+  
+    const match = blockList.includes(path);
+  
+    if (match) return <div>{children}</div>;
   return (
     <footer className="bg-black text-white py-10 px-4 h-screen">
       {/* Top Section */}

@@ -48,6 +48,50 @@ export const fetchSingleProduct = createAsyncThunk(
   }
 );
 
+export const add_product = createAsyncThunk(
+  "product/add_product",
+  async (product, { rejectWithValue, fulfillWithValue, getState }) => {
+    // const token = getState().auth.token;
+    // const config = {
+    //   headers: {
+    //     Authorization: `Bearer ${token}`,
+    //     "Content-Type": "multipart/form-data", // Required for file uploads
+    //   },
+    // };
+
+    try {
+      const formData = new FormData();
+      formData.append("title", product.title);
+      formData.append("desc", product.desc);
+      formData.append("sold", product.sold);
+      formData.append("stock", product.stock);
+      formData.append("discount", product.discount);
+      formData.append("category", product.category);
+      formData.append("brand", product.brand || "");
+      formData.append("price", product.price);
+      formData.append("sizes", JSON.stringify(product.sizes));
+      formData.append("color", JSON.stringify(product.color));
+
+      // Append images and colorImages
+      product.images.forEach((image) => formData.append("images", image));
+      product.colorImages.forEach((image) =>
+        formData.append("colorImages", image)
+      );
+
+      // Send request to the server
+      const { data } = await axios.post(
+        `${serverURL}/api/product/create`,
+        formData
+      );
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { error: "An unknown error occurred" }
+      );
+    }
+  }
+);
+
 // Initial State
 const initialState = {
   products: [],
@@ -56,6 +100,7 @@ const initialState = {
   searchQuery: "",
   loading: false,
   error: null,
+  successMessage: "",
   pagination: {
     totalLoad: 1,
     currentLoad: 1,
@@ -76,9 +121,14 @@ export const productSlice = createSlice({
       state.searchQuery = action.payload.trim();
     },
 
-    resetSearchResults:(state)=>{
-      state.searchResults=[]
-    }
+    resetSearchResults: (state) => {
+      state.searchResults = [];
+    },
+
+    messageClear: (state) => {
+      state.error = "";
+      state.successMessage = "";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -97,7 +147,6 @@ export const productSlice = createSlice({
         if (state.searchQuery) {
           // Store searched products separately
           state.searchResults = action.payload.products;
-
         } else {
           // Keep original products array
           state.products = [...state.products, ...newProducts];
@@ -124,10 +173,26 @@ export const productSlice = createSlice({
       .addCase(fetchSingleProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      //add single product
+      .addCase(add_product.pending, (state) => {
+        state.loading = true;
+        state.error = "";
+        state.successMessage = "";
+      })
+      .addCase(add_product.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.successMessage = payload.message;
+        state.product = payload.product; 
+      })
+      .addCase(add_product.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload.message || "Failed to add product";
       });
   },
 });
 
 // Export Actions & Reducer
-export const { seeMoreProducts, setSearchQuery ,resetSearchResults} = productSlice.actions;
+export const { seeMoreProducts, setSearchQuery, resetSearchResults } =
+  productSlice.actions;
 export default productSlice.reducer;
