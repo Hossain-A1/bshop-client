@@ -15,7 +15,8 @@ export const fetchSingleUser = createAsyncThunk(
 );
 
 const initialState = {
-  token: cookie.get("auth") || null, // Extract auth token from cookie on client
+  auth: cookie.get("auth") || null, // Extract auth token from cookie on client
+token:cookie.get("accessToken") || null,
   userAddress: null,
   loading: false,
   error: null,
