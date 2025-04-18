@@ -29,7 +29,7 @@ import {
 
 const Navbar = ({ children }) => {
   const { cartItems } = useSelector((state) => state.cart);
-  const { token } = useSelector((state) => state.auth);
+  const { auth } = useSelector((state) => state.auth);
   const { searchQuery } = useSelector((state) => state.product);
   const [openCtg, setOpenCtg] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -154,9 +154,9 @@ const Navbar = ({ children }) => {
             )}
           </span>
 
-          {token ? (
+          {auth ? (
             <span className='flex flex-col items-center cursor-pointer relative group'>
-              <p className='hidden lg:block text-sm text-org'>{token?.email}</p>
+              <p className='hidden lg:block text-sm text-org'>{auth?.email}</p>
               <p className='text-xs sm:text-sm font-medium hover:text-green-800 duration-300'>
                 Orders & Account
               </p>
