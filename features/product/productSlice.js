@@ -1,4 +1,4 @@
-import { getSingleProduct } from "@/libs";
+import { addProduct, getSingleProduct } from "@/libs";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -50,39 +50,9 @@ export const fetchSingleProduct = createAsyncThunk(
 
 export const add_product = createAsyncThunk(
   "product/add_product",
-  async (product, { rejectWithValue, fulfillWithValue, getState }) => {
-    // const token = getState().auth.token;
-    // const config = {
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //     "Content-Type": "multipart/form-data", // Required for file uploads
-    //   },
-    // };
-
+  async (_, { rejectWithValue, fulfillWithValue }) => {
     try {
-      const formData = new FormData();
-      formData.append("title", product.title);
-      formData.append("desc", product.desc);
-      formData.append("sold", product.sold);
-      formData.append("stock", product.stock);
-      formData.append("discount", product.discount);
-      formData.append("category", product.category);
-      formData.append("brand", product.brand || "");
-      formData.append("price", product.price);
-      formData.append("sizes", JSON.stringify(product.sizes));
-      formData.append("color", JSON.stringify(product.color));
-
-      // Append images and colorImages
-      product.images.forEach((image) => formData.append("images", image));
-      product.colorImages.forEach((image) =>
-        formData.append("colorImages", image)
-      );
-
-      // Send request to the server
-      const { data } = await axios.post(
-        `${serverURL}/api/product/create`,
-        formData
-      );
+      const data = await addProduct();
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(
@@ -183,7 +153,7 @@ export const productSlice = createSlice({
       .addCase(add_product.fulfilled, (state, { payload }) => {
         state.loading = false;
         state.successMessage = payload.message;
-        state.product = payload.product; 
+        state.product = payload.product;
       })
       .addCase(add_product.rejected, (state, { payload }) => {
         state.loading = false;

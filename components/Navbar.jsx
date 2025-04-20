@@ -29,17 +29,20 @@ import {
 
 const Navbar = ({ children }) => {
   const { cartItems } = useSelector((state) => state.cart);
-  const { token } = useSelector((state) => state.auth);
+  const { auth, token } = useSelector((state) => state.auth);
   const { searchQuery } = useSelector((state) => state.product);
   const [openCtg, setOpenCtg] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
-
   const path = usePathname();
-
-  const blockList = ["/admin", "/admin/orders", "/admin/add","/admin/dashboard"];
-
+  const blockList = [
+    "/admin",
+    "/admin/orders",
+    "/admin/add",
+    "/admin/dashboard",
+  ];
+  console.log(token);
   const match = blockList.includes(path);
 
   if (match) return <div>{children}</div>;
@@ -51,7 +54,7 @@ const Navbar = ({ children }) => {
   ];
 
   const handleNavigate = () => {
-    if (cartItems.length <= 0 && !token) {
+    if (cartItems.length <= 0 && !auth) {
       setOpenModal(true);
     } else {
       router.push("/cart");
@@ -67,6 +70,11 @@ const Navbar = ({ children }) => {
     if (openCtg) {
       setOpenCtg(false);
     }
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    router.refresh();
   };
 
   useEffect(() => {
@@ -154,9 +162,9 @@ const Navbar = ({ children }) => {
             )}
           </span>
 
-          {token ? (
+          {auth ? (
             <span className='flex flex-col items-center cursor-pointer relative group'>
-              <p className='hidden lg:block text-sm text-org'>{token?.email}</p>
+              <p className='hidden lg:block text-sm text-org'>{auth?.email}</p>
               <p className='text-xs sm:text-sm font-medium hover:text-green-800 duration-300'>
                 Orders & Account
               </p>
@@ -192,7 +200,7 @@ const Navbar = ({ children }) => {
                     My Returns & Cancellations
                   </li>
                   <li
-                    onClick={() => dispatch(logout())}
+                    onClick={handleLogout}
                     className='px-4 py-2 hover:bg-gray-100 flex items-center gap-2'
                   >
                     <FaSignOutAlt className='text-gray-600' />

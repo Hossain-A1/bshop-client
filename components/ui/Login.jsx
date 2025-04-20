@@ -6,6 +6,8 @@ import { MdClose } from "react-icons/md";
 import { z } from "zod";
 import { login } from "@/features/auth/authSlice";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+import { serverURL } from "@/secret";
 
 const Login = ({ setOpenModal }) => {
   useEffect(() => {
@@ -15,10 +17,10 @@ const Login = ({ setOpenModal }) => {
     };
   }, []);
   const dispatch = useDispatch();
-  const backendUrl = "http://localhost:4000";
+  const router = useRouter();
   const [state, setState] = useState("Login");
   const [error, setError] = useState(null);
-  const [focusedField, setFocusedField] = useState(null); 
+  const [focusedField, setFocusedField] = useState(null);
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -57,7 +59,7 @@ const Login = ({ setOpenModal }) => {
       let validatedData;
 
       // If validation passes, make the API call
-      let newUrl = backendUrl;
+      let newUrl = serverURL;
       if (state === "Login") {
         validatedData = loginSchema.parse(data);
         newUrl += "/api/auth/login";
@@ -72,12 +74,13 @@ const Login = ({ setOpenModal }) => {
 
       if (res.data.success) {
         const auth = cookie.get("auth");
-        dispatch(login(JSON.parse(auth)));
+        dispatch(login(auth));
+        router.refresh()
         setOpenModal(false);
       }
     } catch (err) {
       if (err instanceof z.ZodError) {
-        setError(err.errors[0].message); 
+        setError(err.errors[0].message);
       } else if (err.response) {
         // Handle backend errors
         setError(err.response.data.message);
@@ -90,6 +93,8 @@ const Login = ({ setOpenModal }) => {
       }
     }
   };
+
+
 
   return (
     <div className='fixed max-sm:w-full md:w-96 max-sm:px-2 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 no-scroll z-50  flex justify-center items-center '>

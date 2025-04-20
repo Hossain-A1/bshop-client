@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { getTotalAmount, getTotalItems } from "@/utils";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { serverURL } from "@/secret";
 
 const PlaceOrder = () => {
   const { cartItems } = useSelector((state) => state.cart);
@@ -61,7 +62,6 @@ const PlaceOrder = () => {
     }
   }, [userAddress]); // Run this effect when userAddress changes
 
-  const serverURL = "http://localhost:4000";
   const deliveryCharge =
     cartItems.length === 1 ? 100 : 100 + (cartItems.length - 1) * 30;
 
@@ -104,6 +104,8 @@ const PlaceOrder = () => {
       if (res.data.success) {
         toast.success("Address saved");
         setEditMode(false);
+      }else{
+        toast.error("something went wrong")
       }
     } catch (error) {
       console.log(error);

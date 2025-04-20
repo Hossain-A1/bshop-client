@@ -14,8 +14,13 @@ export const fetchSingleUser = createAsyncThunk(
   }
 );
 
+const authCookie = cookie.get("auth");
+const parse = authCookie ? JSON.parse(authCookie) : null;
+const getToken = cookie.get("accessToken");
+const accessToken = getToken ? getToken : null;
 const initialState = {
-  token: cookie.get("auth") || null, // Extract auth token from cookie on client
+  auth: parse,
+  token: accessToken,
   userAddress: null,
   loading: false,
   error: null,
@@ -26,12 +31,13 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      state.token = action.payload;
+      state.auth = action.payload;
     },
     logout: (state) => {
       state.token = null;
       state.userAddress = null;
-      cookie.remove("auth"); // Remove token from cookie
+      state.auth = null;
+      cookie.remove("auth");
     },
   },
   extraReducers: (builder) => {

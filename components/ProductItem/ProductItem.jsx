@@ -1,13 +1,16 @@
 "use client";
 import Image from "next/image";
 import { useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useRouter} from "next/navigation";
 import { LiaCartPlusSolid } from "react-icons/lia";
 import Loading from "../ui/Loading";
 import Error from "../ui/Error";
 import { slugify } from "@/utils";
+import { useEffect } from "react";
 
 const ProductItem = () => {
+
+
   const { products, searchResults, loading, error } = useSelector(
     (state) => state.product
   );

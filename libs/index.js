@@ -1,6 +1,8 @@
-import axios from "axios";
 
-const serverURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+import { serverURL } from "@/secret";
+import axios from "axios";
+import cookie from "js-cookie";
+
 
 export const getSingleProduct = async (slug) => {
   try {
@@ -11,6 +13,50 @@ export const getSingleProduct = async (slug) => {
   } catch (error) {
     console.log("❌ API Fetch Error:");
     throw error.response?.data?.message || error.message; // 🔥 Throw error for Redux rejection
+  }
+};
+
+export const addProduct = async () => {
+  try {
+    const token = cookie.get("accessToken"); // read from cookie directly
+    if (!token) {
+      console.log("token not found");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("title", product.title);
+    formData.append("desc", product.desc);
+    formData.append("sold", product.sold);
+    formData.append("stock", product.stock);
+    formData.append("discount", product.discount);
+    formData.append("category", product.category);
+    formData.append("brand", product.brand || "");
+    formData.append("price", product.price);
+    formData.append("sizes", JSON.stringify(product.sizes));
+    formData.append("color", JSON.stringify(product.color));
+
+    // Append images and colorImages
+    product.images.forEach((image) => formData.append("images", image));
+    product.colorImages.forEach((image) =>
+      formData.append("colorImages", image)
+    );
+
+    // Send request to the server
+    const res = await axios.post(`${serverURL}/api/product/create`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data", // Required for file uploads
+      },
+    });
+
+    if (res.data.success) {
+      const data = res.data.payload;
+      return data;
+    }
+  } catch (error) {
+    console.log("❌ API Fetch Error:");
+    throw error.response?.data?.message || error?.message; // 🔥 Throw error for Redux rejection
   }
 };
 
@@ -25,7 +71,7 @@ export const handleAddToCart = async (count, token) => {
     return res.data.payload.items;
   } catch (error) {
     console.log("❌ API Fetch Error:");
-    throw error.response?.data?.message || error.message; // 🔥 Throw error for Redux rejection
+    throw error.response?.data?.message || error?.message; // 🔥 Throw error for Redux rejection
   }
 };
 
@@ -41,6 +87,6 @@ export const handleGetUser = async (token) => {
     }
   } catch (error) {
     console.log("❌ API Fetch Error:");
-    throw error.response?.data?.message || error.message; // 🔥 Throw error for Redux rejection
+    throw error.response?.data?.message || error?.message; // 🔥 Throw error for Redux rejection
   }
 };
