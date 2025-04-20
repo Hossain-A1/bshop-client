@@ -29,7 +29,7 @@ import {
 
 const Navbar = ({ children }) => {
   const { cartItems } = useSelector((state) => state.cart);
-  const { auth, token } = useSelector((state) => state.auth);
+  const { auth } = useSelector((state) => state.auth);
   const { searchQuery } = useSelector((state) => state.product);
   const [openCtg, setOpenCtg] = useState(false);
   const [openModal, setOpenModal] = useState(false);

@@ -19,8 +19,13 @@ const parse = authCookie ? JSON.parse(authCookie) : null;
 const getToken = cookie.get("accessToken");
 const accessToken = getToken ? getToken : null;
 const initialState = {
+<<<<<<< HEAD
   auth: parse,
   token: accessToken,
+=======
+  auth: cookie.get("auth") || null, // Extract auth token from cookie on client
+token:cookie.get("accessToken") || null,
+>>>>>>> 6d8a47ec8baf6f9647052dce870b5cd0380e7336
   userAddress: null,
   loading: false,
   error: null,
