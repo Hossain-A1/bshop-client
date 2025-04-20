@@ -42,7 +42,6 @@ const Navbar = ({ children }) => {
     "/admin/add",
     "/admin/dashboard",
   ];
-  console.log(token);
   const match = blockList.includes(path);
 
   if (match) return <div>{children}</div>;
