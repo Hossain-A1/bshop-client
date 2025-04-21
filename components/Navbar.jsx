@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Login from "./ui/Login";
 import CategoriesModal from "./CategoriesModal";
 import LoginOverlay from "./LoginOverlay";
-import { logout } from "@/features/auth/authSlice";
+import { logout, setOpenModal } from "@/features/auth/authSlice";
 import {
   fetchAllProducts,
   resetSearchResults,
@@ -29,13 +29,15 @@ import {
 
 const Navbar = ({ children }) => {
   const { cartItems } = useSelector((state) => state.cart);
-  const { auth } = useSelector((state) => state.auth);
-  const { searchQuery } = useSelector((state) => state.product);
+  const { auth, openModal } = useSelector((state) => state.auth);
+  const { searchQuery, products } = useSelector((state) => state.product);
   const [openCtg, setOpenCtg] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
   const path = usePathname();
+  const categories = [...new Set(products.map((item) => item.category))].filter(
+    Boolean
+  );
   const blockList = [
     "/admin",
     "/admin/orders",
@@ -62,10 +64,11 @@ const Navbar = ({ children }) => {
   };
 
   const handleSearch = () => {
-    if (searchQuery.trim()) {
-      dispatch(fetchAllProducts({ search: searchQuery }));
+    if (searchQuery) {
       router.push("/products");
+      dispatch(fetchAllProducts({ search: searchQuery }));
     }
+
     if (openCtg) {
       setOpenCtg(false);
     }
@@ -84,10 +87,6 @@ const Navbar = ({ children }) => {
       dispatch(setSearchQuery(""));
     }
   }, [path]);
-
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
 
   return (
     <nav>
@@ -139,10 +138,17 @@ const Navbar = ({ children }) => {
             <input
               value={searchQuery}
               onChange={(e) => dispatch(setSearchQuery(e.target.value))}
-              className='outline-none border-none sm:text-sm text-xs w-full mr-4 md:mr-7'
-              type='search'
+              className='outline-none border-none sm:text-sm text-xs w-full mr-4 md:mr-7 appearance-none '
+              list='search'
+              type='text'
               placeholder='Search here..'
             />
+            <datalist id='search'>
+              {categories?.map((cat, index) => (
+                <option key={index} value={cat} />
+              ))}
+            </datalist>
+
             <button
               type='submit'
               className='absolute flex justify-center items-center cursor-pointer border-none rounded-r-full p-1 md:p-2 h-full bg-org/50 hover:bg-org/70 transition-all right-0'
@@ -209,7 +215,7 @@ const Navbar = ({ children }) => {
               </div>
             </span>
           ) : (
-            <span onClick={handleOpenModal}>
+            <span onClick={() => dispatch(setOpenModal())}>
               <FaRegUser className='text-xl' />
             </span>
           )}
@@ -227,8 +233,8 @@ const Navbar = ({ children }) => {
         {openCtg && <Overlay setOpenCtg={setOpenCtg} />}
         {openModal && (
           <>
-            <LoginOverlay setOpenModal={setOpenModal} />
-            <Login setOpenModal={setOpenModal} />
+            <LoginOverlay />
+            <Login />
           </>
         )}
       </section>

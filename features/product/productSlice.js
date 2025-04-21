@@ -88,7 +88,8 @@ export const productSlice = createSlice({
       }
     },
     setSearchQuery: (state, action) => {
-      state.searchQuery = action.payload.trim();
+      state.searchQuery = action.payload;
+      
     },
 
     resetSearchResults: (state) => {
@@ -114,6 +115,7 @@ export const productSlice = createSlice({
           (product) => !existingIds.has(product._id)
         );
 
+
         if (state.searchQuery) {
           // Store searched products separately
           state.searchResults = action.payload.products;
@@ -127,9 +129,9 @@ export const productSlice = createSlice({
           totalProducts: action.payload.totalNumberOfProducts,
         };
       })
-      .addCase(fetchAllProducts.rejected, (state) => {
+      .addCase(fetchAllProducts.rejected, (state,action) => {
         state.loading = false;
-        state.error = true;
+        state.error = action.payload;
       })
       // single product----------
       .addCase(fetchSingleProduct.pending, (state) => {

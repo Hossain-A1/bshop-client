@@ -24,6 +24,19 @@ body {
 .hidden-scroll::-webkit-scrollbar{
   display: none;
 }
+
+/* Hide dropdown icon in Chrome, Safari, Edge */
+input::-webkit-calendar-picker-indicator {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
+/* Hide the default arrow in Firefox */
+input[list] {
+  appearance: none;
+  -moz-appearance: none;
+}
+
 /* Prevent scrolling when no-scroll class is active */
 .no-scroll {
   overflow: hidden;

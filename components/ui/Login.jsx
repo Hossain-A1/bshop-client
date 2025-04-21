@@ -4,12 +4,12 @@ import cookie from "js-cookie"; // Use js-cookie for client-side cookie handling
 import axios from "axios";
 import { MdClose } from "react-icons/md";
 import { z } from "zod";
-import { login } from "@/features/auth/authSlice";
+import { login, setOffModal } from "@/features/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { serverURL } from "@/secret";
 
-const Login = ({ setOpenModal }) => {
+const Login = () => {
   useEffect(() => {
     document.body.classList.add("no-scroll");
     return () => {
@@ -75,8 +75,8 @@ const Login = ({ setOpenModal }) => {
       if (res.data.success) {
         const auth = cookie.get("auth");
         dispatch(login(auth));
-        router.refresh()
-        setOpenModal(false);
+        router.refresh();
+        dispatch(setOffModal());
       }
     } catch (err) {
       if (err instanceof z.ZodError) {
@@ -94,8 +94,6 @@ const Login = ({ setOpenModal }) => {
     }
   };
 
-
-
   return (
     <div className='fixed max-sm:w-full md:w-96 max-sm:px-2 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 no-scroll z-50  flex justify-center items-center '>
       <form
@@ -103,7 +101,7 @@ const Login = ({ setOpenModal }) => {
         className='relative bg-white p-10 rounded-xl text-slate-700 w-full'
       >
         <span
-          onClick={() => setOpenModal(false)}
+          onClick={() => dispatch(setOffModal())}
           className='absolute right-2 top-2 p-2 rounded-full border'
         >
           <MdClose />

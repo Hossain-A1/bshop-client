@@ -6,7 +6,6 @@ import { LiaCartPlusSolid } from "react-icons/lia";
 import Loading from "../ui/Loading";
 import Error from "../ui/Error";
 import { slugify } from "@/utils";
-import { useEffect } from "react";
 
 const ProductItem = () => {
 
@@ -23,7 +22,7 @@ const ProductItem = () => {
       {loading && <Loading isLoading={loading} />}
       {error && <Error error={error} />}
 
-      <div className='grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4   items-center gap-3 mt-4'>
+     {!error&&( <div className='grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4   items-center gap-3 mt-4'>
         {displayedProducts &&
           displayedProducts.map((item) => (
             <div
@@ -67,7 +66,7 @@ const ProductItem = () => {
               </div>
             </div>
           ))}
-      </div>
+      </div>)}
     </div>
   );
 };

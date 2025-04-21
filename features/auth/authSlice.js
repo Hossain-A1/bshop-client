@@ -21,10 +21,10 @@ const accessToken = getToken ? getToken : null;
 const initialState = {
   auth: parse,
   token: accessToken,
-  auth: cookie.get("auth") || null,
   userAddress: null,
   loading: false,
   error: null,
+  openModal: false,
 };
 
 export const authSlice = createSlice({
@@ -40,6 +40,12 @@ export const authSlice = createSlice({
       state.auth = null;
       cookie.remove("auth");
       cookie.remove("accessToken");
+    },
+    setOpenModal: (state) => {
+      state.openModal = true;
+    },
+    setOffModal: (state) => {
+      state.openModal = false;
     },
   },
   extraReducers: (builder) => {
@@ -60,6 +66,6 @@ export const authSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { login, logout } = authSlice.actions;
+export const { login, logout,setOpenModal,setOffModal } = authSlice.actions;
 
 export default authSlice.reducer;
