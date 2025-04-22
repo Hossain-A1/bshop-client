@@ -25,6 +25,7 @@ const Login = () => {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   // Zod schema for validation
@@ -43,6 +44,20 @@ const Login = () => {
       .email("Please enter a valid email address"),
     password: z.string().min(1, "Password is required"),
   });
+  const forgetPasswordSchema = z
+  .object({
+    password: z.string().min(1, "Password is required"),
+    confirmPassword: z.string().min(1, "Confirm Password is required"),
+    email: z
+      .string()
+      .min(1, "Email is required")
+      .email("Please enter a valid email address"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
 
   const handleGetStarted = async (e) => {
     e.preventDefault();
@@ -63,6 +78,9 @@ const Login = () => {
       if (state === "Login") {
         validatedData = loginSchema.parse(data);
         newUrl += "/api/auth/login";
+      } else if (state === "Forget") {
+        validatedData = forgetPasswordSchema.parse(data);
+        newUrl += "/api/auth/forget";
       } else {
         validatedData = registerSchema.parse(data);
         newUrl += "/api/auth/register";
@@ -116,7 +134,7 @@ const Login = () => {
           <p className='text-red-500 text-sm mt-2 text-center'>{error}</p>
         )}
 
-        {state !== "Login" && (
+        {state === "Sign-Up" && (
           <div className='space-y-1'>
             <div
               className={`border px-6 py-2 flex items-center gap-2 rounded-full mt-5 ${
@@ -167,20 +185,48 @@ const Login = () => {
             placeholder='Password'
           />
         </div>
+        {state === "Forget" && (
+          <div
+            className={`border px-6 py-2 flex items-center gap-2 rounded-full mt-4 ${
+              focusedField === "confirmPassword"
+                ? "border-black"
+                : "border-gray-300"
+            }`}
+          >
+            <input
+              className='w-full outline-none text-black'
+              onFocus={() => setFocusedField("confirmPassword")}
+              onBlur={() => setFocusedField(null)}
+              onChange={(e) =>
+                setData({ ...data, confirmPassword: e.target.value })
+              }
+              value={data.confirmPassword}
+              type='text'
+              placeholder='Confirm password'
+            />
+          </div>
+        )}
 
-        <p className='text-sm text-blue-600 my-4 cursor-pointer'>
+        <button
+          onClick={() => setState("Forget")}
+          className='text-sm text-blue-600 my-4 cursor-pointer'
+        >
           Forgot password?
-        </p>
+        </button>
 
         <button className='bg-blue-600 w-full text-white py-2 rounded-full'>
-          {state === "Login" ? "Login" : "Create Account"}
+          {state === "Login"
+            ? "Login"
+            : state === "Forget"
+            ? "Update Password"
+            : "Create Account"}
         </button>
 
         {state === "Login" ? (
           <p className='text-base mt-2'>
             Don't have an account?{" "}
             <span
-              onClick={() => setState("Sign Up")}
+              onClick={() => setState("Sign-Up")}
               className='text-blue-600 cursor-pointer'
             >
               Sign up
