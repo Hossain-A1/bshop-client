@@ -76,6 +76,7 @@ export const handleAddToCart = async (count, token) => {
 };
 
 export const handleGetUser = async (token) => {
+  console.log(token);
   try {
     const res = await axios.get(serverURL + "/api/auth/get", {
       headers: { Authorization: `Bearer ${token}` },

@@ -39,7 +39,8 @@ export const authSlice = createSlice({
       state.userAddress = null;
       state.auth = null;
       cookie.remove("auth");
-      cookie.remove("accessToken");
+      cookie.remove("accessToken"),
+      localStorage.removeItem('cart') 
     },
     setOpenModal: (state) => {
       state.openModal = true;
@@ -66,6 +67,6 @@ export const authSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { login, logout,setOpenModal,setOffModal } = authSlice.actions;
+export const { login, logout, setOpenModal, setOffModal } = authSlice.actions;
 
 export default authSlice.reducer;

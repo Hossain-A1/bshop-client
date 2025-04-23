@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import cookie from "js-cookie"; // Use js-cookie for client-side cookie handling
+import cookie from "js-cookie";
 import axios from "axios";
 import { MdClose } from "react-icons/md";
 import { z } from "zod";
@@ -9,15 +9,33 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { serverURL } from "@/secret";
 
+// Zod validation schemas
+const loginSchema = z.object({
+  email: z.string().min(1, "Email is required").email("Enter a valid email"),
+  password: z.string().min(1, "Password is required"),
+});
+
+const registerSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().min(1, "Email is required").email("Enter a valid email"),
+  password: z.string().min(1, "Password is required"),
+});
+
+const forgetSchema = z
+  .object({
+    email: z.string().min(1, "Email is required").email("Enter a valid email"),
+    password: z.string().min(1, "Password is required"),
+    confirmPassword: z.string().min(1, "Confirm Password is required"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
 const Login = () => {
-  useEffect(() => {
-    document.body.classList.add("no-scroll");
-    return () => {
-      document.body.classList.remove("no-scroll");
-    };
-  }, []);
   const dispatch = useDispatch();
   const router = useRouter();
+
   const [state, setState] = useState("Login");
   const [error, setError] = useState(null);
   const [focusedField, setFocusedField] = useState(null);
@@ -28,129 +46,93 @@ const Login = () => {
     confirmPassword: "",
   });
 
-  // Zod schema for validation
-  const loginSchema = z.object({
-    email: z
-      .string()
-      .min(1, "Email is required")
-      .email("Please enter a valid email address"),
-    password: z.string().min(1, "Password is required"),
-  });
-  const registerSchema = z.object({
-    name: z.string().min(1, "Name is required"),
-    email: z
-      .string()
-      .min(1, "Email is required")
-      .email("Please enter a valid email address"),
-    password: z.string().min(1, "Password is required"),
-  });
-  const forgetPasswordSchema = z
-  .object({
-    password: z.string().min(1, "Password is required"),
-    confirmPassword: z.string().min(1, "Confirm Password is required"),
-    email: z
-      .string()
-      .min(1, "Email is required")
-      .email("Please enter a valid email address"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
-
+  useEffect(() => {
+    document.body.classList.add("no-scroll");
+    return () => {
+      document.body.classList.remove("no-scroll");
+    };
+  }, []);
 
   const handleGetStarted = async (e) => {
     e.preventDefault();
-    setError(null); // Clear previous errors
-
-    // Check if both email and password are empty
-    if (data.name === "" && data.email === "" && data.password === "") {
-      setError("Name,Email and password are required");
-      return;
-    }
+    setError(null);
 
     try {
-      // Validate the form data using the schema
       let validatedData;
+      let url = `${serverURL}/api/auth`;
 
-      // If validation passes, make the API call
-      let newUrl = serverURL;
       if (state === "Login") {
         validatedData = loginSchema.parse(data);
-        newUrl += "/api/auth/login";
-      } else if (state === "Forget") {
-        validatedData = forgetPasswordSchema.parse(data);
-        newUrl += "/api/auth/forget";
-      } else {
+        url += "/login";
+      } else if (state === "Sign-Up") {
         validatedData = registerSchema.parse(data);
-        newUrl += "/api/auth/register";
+        url += "/register";
+      } else {
+        validatedData = forgetSchema.parse(data);
+        url += "/forget";
       }
 
-      const res = await axios.post(newUrl, validatedData, {
+      const res = await axios.post(url, validatedData, {
         withCredentials: true,
       });
 
       if (res.data.success) {
         const auth = cookie.get("auth");
         dispatch(login(auth));
-        router.refresh();
         dispatch(setOffModal());
+        router.refresh();
       }
     } catch (err) {
       if (err instanceof z.ZodError) {
         setError(err.errors[0].message);
       } else if (err.response) {
-        // Handle backend errors
-        setError(err.response.data.message);
-      } else if (err.request) {
-        // No response from the server
-        setError("No response from server. Please try again.");
+        setError(err.response.data.message || "Something went wrong");
       } else {
-        // Something went wrong in the request setup
         setError("An error occurred. Please try again.");
       }
     }
   };
 
   return (
-    <div className='fixed max-sm:w-full md:w-96 max-sm:px-2 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 no-scroll z-50  flex justify-center items-center '>
+    <div className='fixed max-sm:w-full md:w-96 max-sm:px-2 left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2 no-scroll z-50 flex justify-center items-center'>
       <form
         onSubmit={handleGetStarted}
         className='relative bg-white p-10 rounded-xl text-slate-700 w-full'
       >
         <span
           onClick={() => dispatch(setOffModal())}
-          className='absolute right-2 top-2 p-2 rounded-full border'
+          className='absolute right-2 top-2 p-2 rounded-full border cursor-pointer'
         >
           <MdClose />
         </span>
         <h1 className='text-center text-2xl text-neutral-700 font-medium'>
           {state}
         </h1>
-        <p className='text-sm'>Welcome back! Please sign in to continue</p>
+        <p className='text-sm text-center'>
+          Welcome back! Please {state.toLowerCase()} to continue
+        </p>
 
-        {/* Display error message */}
         {error && (
           <p className='text-red-500 text-sm mt-2 text-center'>{error}</p>
         )}
 
         {state === "Sign-Up" && (
-          <div className='space-y-1'>
-            <div
-              className={`border px-6 py-2 flex items-center gap-2 rounded-full mt-5 ${
-                focusedField === "name" ? "border-black" : "border-gray-300"
-              }`}
-            >
-              <input
-                className='w-full outline-none text-black'
-                onFocus={() => setFocusedField("name")}
-                onBlur={() => setFocusedField(null)}
-                onChange={(e) => setData({ ...data, name: e.target.value })}
-                value={data.name}
-                type='text'
-                placeholder='Full name'
-              />
-            </div>
+          <div
+            className={`border px-6 py-2 flex items-center gap-2 rounded-full mt-5 ${
+              focusedField === "name" ? "border-black" : "border-gray-300"
+            }`}
+          >
+            <input
+              className='w-full outline-none text-black'
+              onFocus={() => setFocusedField("name")}
+              onBlur={() => setFocusedField(null)}
+              onChange={(e) =>
+                setData({ ...data, name: e.target.value.trim() })
+              }
+              value={data.name}
+              type='text'
+              placeholder='Full name'
+            />
           </div>
         )}
 
@@ -163,7 +145,9 @@ const Login = () => {
             className='w-full outline-none text-black'
             onFocus={() => setFocusedField("email")}
             onBlur={() => setFocusedField(null)}
-            onChange={(e) => setData({ ...data, email: e.target.value })}
+            onChange={(e) =>
+              setData({ ...data, email: e.target.value.trim() })
+            }
             value={data.email}
             type='email'
             placeholder='Email Id'
@@ -179,13 +163,16 @@ const Login = () => {
             className='w-full outline-none text-black'
             onFocus={() => setFocusedField("password")}
             onBlur={() => setFocusedField(null)}
-            onChange={(e) => setData({ ...data, password: e.target.value })}
+            onChange={(e) =>
+              setData({ ...data, password: e.target.value.trim() })
+            }
             value={data.password}
             type='password'
             placeholder='Password'
           />
         </div>
-        {state === "Forget" && (
+
+        {state === "Forget-Password" && (
           <div
             className={`border px-6 py-2 flex items-center gap-2 rounded-full mt-4 ${
               focusedField === "confirmPassword"
@@ -198,51 +185,48 @@ const Login = () => {
               onFocus={() => setFocusedField("confirmPassword")}
               onBlur={() => setFocusedField(null)}
               onChange={(e) =>
-                setData({ ...data, confirmPassword: e.target.value })
+                setData({
+                  ...data,
+                  confirmPassword: e.target.value.trim(),
+                })
               }
               value={data.confirmPassword}
-              type='text'
+              type='password'
               placeholder='Confirm password'
             />
           </div>
         )}
 
         <button
-          onClick={() => setState("Forget")}
+          type='button'
+          onClick={() => setState("Forget-Password")}
           className='text-sm text-blue-600 my-4 cursor-pointer'
         >
           Forgot password?
         </button>
 
-        <button className='bg-blue-600 w-full text-white py-2 rounded-full'>
+        <button
+          type='submit'
+          className='bg-blue-600 w-full text-white py-2 rounded-full'
+        >
           {state === "Login"
             ? "Login"
-            : state === "Forget"
+            : state === "Forget-Password"
             ? "Update Password"
             : "Create Account"}
         </button>
 
-        {state === "Login" ? (
-          <p className='text-base mt-2'>
-            Don't have an account?{" "}
-            <span
-              onClick={() => setState("Sign-Up")}
-              className='text-blue-600 cursor-pointer'
-            >
-              Sign up
-            </span>
-          </p>
-        ) : (
-          <p className='text-base mt-2'>
-            Already have an account?{" "}
-            <span
-              onClick={() => setState("Login")}
-              className='text-blue-600 cursor-pointer'
-            >
-              Login
-            </span>
-          </p>
-        )}
+        <p className='text-base mt-2 text-center'>
+          {state === "Login"
+            ? "Don't have an account? "
+            : "Already have an account? "}
+          <span
+            onClick={() => setState(state === "Login" ? "Sign-Up" : "Login")}
+            className='text-blue-600 cursor-pointer'
+          >
+            {state === "Login" ? "Sign up" : "Login"}
+          </span>
+        </p>
       </form>
     </div>
   );

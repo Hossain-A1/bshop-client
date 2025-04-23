@@ -48,6 +48,7 @@ export const cartSlice = createSlice({
 
       localStorage.setItem("cart", JSON.stringify(state.cartItems)); //
     },
+    
   },
 });
 
